@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ai-mark-lint"
+description = "Checks in CI that synthetic images, video and audio carry the machine-readable AI marks required by EU AI Act art. 50(2), California SB 942/AB 853 and China GB 45438-2025, citing the rule for every finding. Read-only."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "EasyByte Hub, S. Coop. Mad." }]
+keywords = ["c2pa", "content-credentials", "ai-act", "sb-942", "gb-45438", "iptc", "provenance", "linter"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia",
+  "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+
+# **Una sola dependencia, y es a propósito.** Validar un manifiesto C2PA es verificar
+# una firma COSE, una cadena X.509 y unos hashes sobre el fichero: reescribir eso en
+# Python puro sería inventarse criptografía en una herramienta cuyo valor es que se
+# puede creer lo que dice. Para eso está la librería oficial de la C2PA. Todo lo
+# demás —XMP, EXIF, chunks PNG/RIFF, ID3, cajas MP4— se lee con la biblioteca
+# estándar. Si `c2pa-python` no está disponible en tu plataforma, la herramienta no
+# se cae: marca el C2PA como «sin determinar» y sigue con el resto.
+dependencies = ["c2pa-python>=0.38,<0.39"]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.13",
+  "pytest>=8.3",
+  "ruff>=0.8",
+  "PyYAML>=6.0",
+  "types-PyYAML>=6.0",
+  # Las fixtures se fabrican en tiempo de test (tests/fabrica.py): imágenes con Pillow y
+  # una CA de usar y tirar con cryptography. Así no hay ninguna clave privada en el repo.
+  "Pillow>=11.0",
+  "cryptography>=43",
+]
+
+[project.scripts]
+ai-mark-lint = "ai_mark_lint.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/easybytehub/ai-mark-lint"
+Source = "https://github.com/easybytehub/ai-mark-lint"
+Issues = "https://github.com/easybytehub/ai-mark-lint/issues"
+
+[tool.hatch.version]
+path = "src/ai_mark_lint/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ai_mark_lint"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+per-file-ignores = { "tests/*" = ["S101", "S603"], "scripts/*" = ["S603", "S607"] }
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["c2pa", "c2pa.*", "PIL", "PIL.*"]
+ignore_missing_imports = true

@@ -1,0 +1,146 @@
+# Composite action, no Docker or JavaScript. It installs ai-mark-lint from the action's
+# own code (`github.action_path`), not from PyPI: the version you pin in `uses:` is
+# exactly the code that runs, and it works whether or not the package is on PyPI.
+#
+# Note: setup-python changes the Python on the job's PATH for the steps that follow.
+# Set `python-version` to what the rest of your job expects.
+name: ai-mark-lint
+description: >-
+  Checks that generated images, video and audio carry the machine-readable AI marks
+  (C2PA, IPTC DigitalSourceType, GB 45438 AIGC label) required by EU AI Act art. 50(2),
+  California SB 942/AB 853 and China GB 45438-2025. Read-only.
+author: EasyByte Hub, S. Coop. Mad.
+
+branding:
+  icon: check-circle
+  color: blue
+
+inputs:
+  files:
+    description: >-
+      Files to check: one path or glob per line (spaces in names are fine). Leave empty
+      when using before/after.
+    required: false
+    default: ""
+  before:
+    description: Original file, for compare mode (together with after).
+    required: false
+    default: ""
+  after:
+    description: The same file after your pipeline (resize, CDN, CMS...).
+    required: false
+    default: ""
+  jurisdiction:
+    description: "Comma-separated list: eu, ca, cn. 'none' keeps only the technical rules."
+    required: false
+    default: "eu,ca"
+  format:
+    description: "Output format: text, json or sarif."
+    required: false
+    default: sarif
+  strict:
+    description: If 'true', warnings also fail the step.
+    required: false
+    default: "false"
+  fail:
+    description: >-
+      If 'false', the step does not fail on findings. Useful when the SARIF is uploaded
+      afterwards: a step that aborts hides the report that explains why.
+    required: false
+    default: "true"
+  trust-anchors:
+    description: PEM file with the root certificates used to evaluate the C2PA signer.
+    required: false
+    default: ""
+  output:
+    description: File the report is written to when the format is not text.
+    required: false
+    default: ai-mark-lint.sarif
+  python-version:
+    description: >-
+      Python version set up for the tool. setup-python also makes it the job's Python
+      for the steps that follow.
+    required: false
+    default: "3.12"
+
+outputs:
+  errors:
+    description: Number of error findings (json format only).
+    value: ${{ steps.check.outputs.errors }}
+  warnings:
+    description: Number of warning findings (json format only).
+    value: ${{ steps.check.outputs.warnings }}
+  report-file:
+    description: Path of the report, when the format is not text.
+    value: ${{ steps.check.outputs.report-file }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install ai-mark-lint from the action's code
+      shell: bash
+      run: python -m pip install --disable-pip-version-check "${{ github.action_path }}"
+
+    - name: Check AI marks
+      id: check
+      # `bash {0}` instead of `bash`: GitHub's `shell: bash` adds `set -e`, which would
+      # abort on ai-mark-lint's first finding, before the report is written and before
+      # deciding whether the step should fail.
+      shell: bash {0}
+      env:
+        FILES: ${{ inputs.files }}
+        BEFORE: ${{ inputs.before }}
+        AFTER: ${{ inputs.after }}
+        JURISDICTION: ${{ inputs.jurisdiction }}
+        FORMAT: ${{ inputs.format }}
+        STRICT: ${{ inputs.strict }}
+        FAIL: ${{ inputs.fail }}
+        ANCHORS: ${{ inputs.trust-anchors }}
+        OUTPUT: ${{ inputs.output }}
+      run: |
+        options=(--format "$FORMAT" --jurisdiction "$JURISDICTION" --no-color)
+        [ "$STRICT" = "true" ] && options+=(--strict)
+        [ -n "$ANCHORS" ] && options+=(--trust-anchors "$ANCHORS")
+        if [ -n "$BEFORE" ] || [ -n "$AFTER" ]; then
+          target=(--before "$BEFORE" --after "$AFTER")
+        else
+          # One path or glob per line. Splitting only on newlines keeps names with
+          # spaces whole, and the shell still expands the globs.
+          shopt -s nullglob
+          IFS=$'\n'
+          target=($FILES)
+          unset IFS
+          if [ "${#target[@]}" -eq 0 ]; then
+            echo "::error::files matched nothing: $FILES"
+            target=("$FILES")
+          fi
+        fi
+
+        if [ "$FORMAT" = "text" ]; then
+          ai-mark-lint "${target[@]}" "${options[@]}"
+          code=$?
+        else
+          ai-mark-lint "${target[@]}" "${options[@]}" > "$OUTPUT"
+          code=$?
+          echo "report-file=$OUTPUT" >> "$GITHUB_OUTPUT"
+        fi
+
+        # With exit 2 the tool may not have written a report. upload-sarif fails with an
+        # opaque message on an empty or invalid file, so leave a minimal valid SARIF.
+        if [ "$FORMAT" = "sarif" ] && ! python -c "import json,sys;json.load(open(sys.argv[1]))" "$OUTPUT" 2>/dev/null; then
+          echo '{"$schema":"https://json.schemastore.org/sarif-2.1.0.json","version":"2.1.0","runs":[{"tool":{"driver":{"name":"ai-mark-lint","rules":[]}},"results":[]}]}' > "$OUTPUT"
+        fi
+
+        if [ "$FORMAT" = "json" ] && [ -s "$OUTPUT" ]; then
+          python -c "import json,sys;r=json.load(open(sys.argv[1]))['summary'];print(f\"errors={r['errors']}\nwarnings={r['warnings']}\")" "$OUTPUT" >> "$GITHUB_OUTPUT"
+        fi
+
+        if [ "$code" -eq 1 ] && [ "$FAIL" != "true" ]; then
+          echo "::notice::ai-mark-lint found issues; the step does not fail because fail=false."
+          exit 0
+        fi
+        exit "$code"
