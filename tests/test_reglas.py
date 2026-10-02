@@ -26,6 +26,7 @@ CA_SIN_SISTEMA = {"CA-942-003", "CA-942-004"}
 ESPERADO: dict[str, set[str]] = {
     "jpeg/sin-marcas.jpg": {"EU-50-2-001", "CA-942-001", "CN-45438-001"},
     "jpeg/c2pa-ia.jpg": {"C2PA-003", "EU-COP-002", "CN-45438-001"},
+    "jpeg/c2pa-ia-eku-c2pa.jpg": {"C2PA-003", "EU-COP-002", "CN-45438-001"},
     "jpeg/completo.jpg": {"C2PA-003", "EU-COP-002"},
     "jpeg/c2pa-captura.jpg": {"C2PA-003", "EU-50-2-001", "CN-45438-001"},
     "jpeg/c2pa-dst-raro.jpg": {"C2PA-003", "C2PA-006", "EU-50-2-001", "CN-45438-001"},
@@ -191,6 +192,41 @@ def test_interpreta_separa_no_confiable_de_los_fallos() -> None:
     }
     info = lector_c2pa.interpreta(datos, "Invalid")
     assert info.estado == "invalido" and info.fallos == ("assertion.dataHash.mismatch",)
+
+
+def test_el_eku_de_firma_c2pa_se_acepta() -> None:
+    """Regresión de 0.1.0: con el EKU de C2PA (sin emailProtection) la firma es válida, y
+    con la CA de prueba como ancla, de confianza."""
+    ruta = FIX / "jpeg/c2pa-ia-eku-c2pa.jpg"
+    assert inventaria(ruta).c2pa.estado == "valido"
+    anclas = (FIX / "certs-eku-c2pa" / "ca.pem").read_text()
+    assert inventaria(ruta, anclas=anclas).c2pa.estado == "confiable"
+
+
+def _caducado(informativos: list[str]) -> dict[str, object]:
+    return {
+        "active_manifest": "m",
+        "manifests": {"m": {"claim_version": 2, "assertions": [], "signature_info": {}}},
+        "validation_results": {
+            "activeManifest": {
+                "failure": [
+                    {"code": "signingCredential.untrusted"},
+                    {"code": "signingCredential.expired"},
+                ],
+                "informational": [{"code": c} for c in informativos],
+            }
+        },
+    }
+
+
+def test_caducado_con_sello_de_tsa_no_confiable_es_cuestion_de_confianza() -> None:
+    info = lector_c2pa.interpreta(_caducado(["timeStamp.untrusted"]), "Invalid")
+    assert info.estado == "valido" and info.no_confiable and info.fallos == ()
+
+
+def test_caducado_sin_sello_de_tiempo_es_un_fallo() -> None:
+    info = lector_c2pa.interpreta(_caducado(["signingCredential.ocsp.skipped"]), "Invalid")
+    assert info.estado == "invalido" and info.fallos == ("signingCredential.expired",)
 
 
 def test_contradiccion_entre_c2pa_e_iptc() -> None:

@@ -13,6 +13,32 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+# Usos extendidos de clave (EKU) que se aceptan en el certificado del firmante: la lista por
+# defecto de c2pa-rs (`sdk/src/crypto/cose/valid_eku_oids.cfg`, v0.91.0). c2pa-rs la trae, pero
+# un contexto creado desde `Settings` sin `trust_config` se comporta como si estuviera vacía y
+# rechaza con `signingCredential.invalid` los certificados C2PA normales (los de OpenAI
+# emitidos por Trufo, los de Microsoft…). Lo midió el estudio S6 de EasyxLab en Wikimedia
+# Commons: 187 manifiestos válidos dados por inválidos en ai-mark-lint 0.1.0.
+EKU_POR_DEFECTO = """\
+// id-kp-emailProtection
+1.3.6.1.5.5.7.3.4
+
+// id-kp-documentSigning
+1.3.6.1.5.5.7.3.36
+
+// id-kp-timeStamping
+1.3.6.1.5.5.7.3.8
+
+// id-kp-OCSPSigning
+1.3.6.1.5.5.7.3.9
+
+// MS C2PA Signing
+1.3.6.1.4.1.311.76.59.1.9
+
+// C2PA Signing
+1.3.6.1.4.1.62558.2.1
+"""
+
 
 class AnclasInvalidas(ValueError):
     """El PEM de --trust-anchors no se puede usar. Es un error de uso (salida 2)."""
@@ -107,6 +133,15 @@ def interpreta(
     ]
     no_confiable, fallos, cawg = clasifica(codigos)
 
+    # Con un sello de tiempo íntegro de una TSA que no está en la lista de confianza,
+    # c2pa-rs ignora la hora del sello y comprueba el certificado a fecha de hoy: si ya
+    # caducó, sale `signingCredential.expired`. Eso depende de confiar en la TSA, no del
+    # fichero. Sin sello de tiempo, en cambio, la caducidad es un fallo real.
+    informativos = {str(v.get("code", "")) for v in resultados.get("informational", [])}
+    if "timeStamp.untrusted" in informativos and "signingCredential.expired" in fallos:
+        fallos = tuple(c for c in fallos if c != "signingCredential.expired")
+        no_confiable = True
+
     grupos = _acciones(manifiesto)
     acciones = grupos[0] if grupos else []  # § 18.14.2 mira la primera aserción
     todas = [a for g in grupos for a in g]
@@ -187,10 +222,13 @@ def contexto(anclas: str | None) -> Any:
                 x509.load_pem_x509_certificates(anclas.encode())
             except ValueError as exc:
                 raise AnclasInvalidas(f"unreadable certificate: {exc}") from exc
-    ajustes: dict[str, Any] = {"verify": {"remote_manifest_fetch": False}}
+    ajustes: dict[str, Any] = {
+        "verify": {"remote_manifest_fetch": False},
+        "trust": {"trust_config": EKU_POR_DEFECTO},
+    }
     if anclas is not None:
         ajustes["verify"]["verify_trust"] = True
-        ajustes["trust"] = {"trust_anchors": anclas}
+        ajustes["trust"]["trust_anchors"] = anclas
     try:
         return c2pa.Context(c2pa.Settings.from_dict(ajustes))
     except c2pa.C2paError as exc:

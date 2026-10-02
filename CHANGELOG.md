@@ -2,7 +2,22 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: SemVer.
 
-## [Unreleased]
+## [0.1.1] — 2026-10-03
+
+### Fixed
+- **False C2PA-002 on valid manifests signed with standard C2PA certificates.** The c2pa
+  context was built without an extended-key-usage list, and c2pa-rs then behaved as if
+  that list were empty. Certificates whose EKU is C2PA claim signing, `documentSigning`
+  or Microsoft's C2PA OID were reported as `signingCredential.invalid` — among them
+  OpenAI's 2026 certificates (issued by Trufo, on the official C2PA Trust List) and
+  Microsoft's. ai-mark-lint now always passes c2pa-rs's own default EKU list. Found by
+  EasyxLab study S6, which measured 187 such false errors among 623 manifests on
+  Wikimedia Commons.
+- **A certificate that expired after a time-stamped signature is no longer an error
+  when the time-stamp authority is not trusted.** c2pa-rs then checks the certificate
+  at today's date; whether it was valid when signed depends on trusting that TSA, so it
+  is reported as a trust question (C2PA-003), not as an invalid manifest. Without a
+  time-stamp, an expired certificate is still C2PA-002.
 
 ### Changed
 - The lab behind the tool is now called EasyxLab; one diagnostic message that cites

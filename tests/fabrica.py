@@ -39,16 +39,23 @@ AIGC = {
     "ReservedCode2": "",
 }
 CUANDO = "2026-10-02T10:00:00Z"
+# Firma de claims C2PA (1.3.6.1.4.1.62558.2.1) y id-kp-documentSigning (RFC 9336).
+EKU_C2PA = [
+    x509.ObjectIdentifier("1.3.6.1.4.1.62558.2.1"),
+    x509.ObjectIdentifier("1.3.6.1.5.5.7.3.36"),
+]
 
 
 # --- CA de prueba ----------------------------------------------------------------------
 
 
-def credenciales(destino: Path) -> tuple[bytes, bytes]:
+def credenciales(
+    destino: Path, ekus: list[x509.ObjectIdentifier] | None = None
+) -> tuple[bytes, bytes]:
     """Crea la CA y el certificado firmante; deja `ca.pem` (público) en `destino`.
 
     Devuelve (cadena PEM firmante+CA, clave PKCS#8). El perfil es el que exige c2pa-rs:
-    hoja con digitalSignature crítica, EKU emailProtection y CA:FALSE.
+    hoja con digitalSignature crítica, CA:FALSE y un EKU; por defecto emailProtection.
     """
     ahora = datetime.now(UTC)
 
@@ -98,7 +105,7 @@ def credenciales(destino: Path) -> tuple[bytes, bytes]:
         .not_valid_after(ahora + timedelta(days=30))
         .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
         .add_extension(uso(firma=True), critical=True)
-        .add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.EMAIL_PROTECTION]), False)
+        .add_extension(x509.ExtendedKeyUsage(ekus or [ExtendedKeyUsageOID.EMAIL_PROTECTION]), False)
         .add_extension(x509.SubjectKeyIdentifier.from_public_key(clave.public_key()), False)
         .add_extension(
             x509.AuthorityKeyIdentifier.from_issuer_public_key(clave_ca.public_key()), False
@@ -270,6 +277,14 @@ def genera(raiz: Path) -> None:
     w(
         "jpeg/c2pa-dst-raro.jpg",
         f.firma(base, "image/jpeg", creada("inventadoPorMi"), sin_verificar=True),
+    )
+    # Firmado con el perfil de los certificados C2PA reales (OpenAI vía Trufo): EKU de firma
+    # de claims C2PA más documentSigning, sin emailProtection. ai-mark-lint 0.1.0 lo daba
+    # por inválido (C2PA-002) porque c2pa-rs no recibía su lista de EKU.
+    cadena_c2pa, clave_c2pa = credenciales(raiz / "certs-eku-c2pa", EKU_C2PA)
+    w(
+        "jpeg/c2pa-ia-eku-c2pa.jpg",
+        Firmante(cadena_c2pa, clave_c2pa).firma(base, "image/jpeg", creada(), sin_verificar=True),
     )
     w("jpeg/iptc-ia.jpg", jpeg_con_xmp(base, xmp(ia)))
     w("jpeg/iptc-codigo-suelto.jpg", jpeg_con_xmp(base, xmp("trainedAlgorithmicMedia")))
