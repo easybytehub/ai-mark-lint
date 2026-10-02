@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -31,7 +32,7 @@ PARES = {
 def test_pares(antes: str, despues: str) -> None:
     hallazgos = compara(inventaria(FIX / antes), inventaria(FIX / despues), TODAS)
     assert {h.regla for h in hallazgos} == PARES[(antes, despues)]
-    assert all(h.fichero.endswith(despues) for h in hallazgos)
+    assert all(Path(h.fichero).as_posix().endswith(despues) for h in hallazgos)
 
 
 def test_una_plataforma_que_anade_propagador_no_es_hallazgo() -> None:

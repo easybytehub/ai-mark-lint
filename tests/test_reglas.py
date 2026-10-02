@@ -8,6 +8,7 @@ disparar, o una que empieza a disparar donde no debe, rompe aquí.
 from __future__ import annotations
 
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -72,7 +73,7 @@ def test_cada_fixture_dispara_exactamente_sus_reglas(nombre: str) -> None:
     hallazgos = audita(inventaria(FIX / nombre), TODAS)
     assert {h.regla for h in hallazgos} == ESPERADO[nombre]
     for h in hallazgos:
-        assert h.norma and h.detalle and h.fichero.endswith(nombre)
+        assert h.norma and h.detalle and Path(h.fichero).as_posix().endswith(nombre)
 
 
 @pytest.mark.parametrize("nombre", ["jpeg/c2pa-ia.jpg", "mp4/c2pa-ia.mp4", "wav/c2pa-ia.wav"])

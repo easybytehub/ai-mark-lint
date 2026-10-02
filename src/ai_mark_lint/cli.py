@@ -89,7 +89,21 @@ def _error(msg: str) -> int:
     return 2
 
 
+def _salida_utf8() -> None:
+    # On Windows, redirected output (CI logs, pipes, files) uses the ANSI code page, which has
+    # no '→' and no Chinese characters: print() would raise UnicodeEncodeError and the tool
+    # would exit 2 on a valid run. Force UTF-8 on both streams when the runtime allows it.
+    for flujo in (sys.stdout, sys.stderr):
+        reconfigurar = getattr(flujo, "reconfigure", None)
+        if reconfigurar is not None:
+            try:
+                reconfigurar(encoding="utf-8", errors="replace")
+            except (ValueError, OSError):
+                pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    _salida_utf8()
     args = _argumentos(argv)
     try:
         return _ejecuta(args)
