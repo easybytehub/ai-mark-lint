@@ -277,14 +277,17 @@ def test_native_library_failing_to_load(monkeypatch: pytest.MonkeyPatch) -> None
 # --- Menores -------------------------------------------------------------------------------
 
 
-def test_sarif_uri_relative_to_cwd(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_sarif_uri_relative_to_cwd(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     from ai_mark_lint.salida import _uri
 
     monkeypatch.chdir(FIX)
     assert _uri(str(FIX / "jpeg" / "a b.jpg")) == "jpeg/a b.jpg"
     assert _uri("rel/x.jpg") == "rel/x.jpg"
-    assert _uri("/elsewhere/x y.jpg").endswith("/elsewhere/x%20y.jpg")
-    assert _uri("/elsewhere/x y.jpg").startswith("file:///")
+    # An absolute path outside the working directory, valid on every OS (on Windows,
+    # "/elsewhere" has no drive letter and is not absolute).
+    fuera = str(tmp_path / "elsewhere" / "x y.jpg")
+    assert _uri(fuera).startswith("file:///")
+    assert _uri(fuera).endswith("/elsewhere/x%20y.jpg")
 
 
 def test_new_rules_keep_their_severity() -> None:
