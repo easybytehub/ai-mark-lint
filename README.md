@@ -137,7 +137,7 @@ jobs:
         with:
           persist-credentials: false
       - run: python generate_samples.py --out samples/   # your system's real outputs
-      - uses: easybytehub/ai-mark-lint@<commit SHA of the release>  # v0.1.0
+      - uses: easybytehub/ai-mark-lint@94d400d98de666cff9bd6595ac88cd0a96a29a87  # v0.1.0
         with:
           files: |
             samples/*.jpg
