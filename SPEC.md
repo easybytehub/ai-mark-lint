@@ -115,6 +115,12 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
   reported (`signingCredential.untrusted`, `timeStamp.untrusted`,
   `cawg.x509.credential.untrusted`…). Which trust list applies depends on the
   verifier, not on the file: `--trust-anchors PEM` evaluates against the one you give.
+- **Expired certificate with an untrusted time-stamp:** C2PA 2.2 § 15.8.2 says the
+  validator “shall issue a timestamp.untrusted informational code and ignore the
+  time-stamp”, so the expired certificate is then rejected. ai-mark-lint has no TSA trust
+  list, so whether the certificate was valid when signed is a trust question, not a defect
+  of the file: it reports C2PA-003 and says so, instead of C2PA-002. This is a deliberate
+  deviation, consistent with how it treats `signingCredential.untrusted`.
 
 ### C2PA-004 — The manifest does not start with c2pa.created or c2pa.opened
 
@@ -366,6 +372,15 @@ technically feasible and reasonable” and may be given through a link.
 - **Source:** <https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm> (accessed 2026-10-02)
 - **How it is checked:** more than one AIGC label, differing in `Label`,
   `ContentProducer` or `ProduceID`.
+
+### CN-45438-006 — The AIGC label is JSON-encoded twice
+
+- **Severity:** warning
+- **Literal:** the TC260 guides set the label value as a JSON object.
+- **Source:** <https://www.tc260.org.cn/> (TC260 practice guides; accessed 2026-10-03)
+- **How it is checked:** the value parses as a JSON *string* whose content parses as the
+  label object. The label is counted as a mark, but a reader that parses it once, as the
+  guides describe, misses it. Seen on Wikimedia Commons by EasyxLab study S6.
 
 ## Before/after comparison (`--before A --after B`)
 

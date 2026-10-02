@@ -47,6 +47,7 @@ ESPERADO: dict[str, set[str]] = {
     "png/aigc.png": {"EU-COP-001", *CA_SIN_SISTEMA},
     "png/c2pa-ia.png": {"C2PA-003", "EU-COP-002", "CN-45438-001"},
     "png/iptc-ia.png": {"EU-COP-001", "CA-942-002", *CA_SIN_SISTEMA, "CN-45438-001"},
+    "png/aigc-doble.png": {"EU-COP-001", *CA_SIN_SISTEMA, "CN-45438-006"},
     "png/aigc-json-roto.png": {
         "EU-50-2-001",
         "CA-942-002",
@@ -222,6 +223,7 @@ def _caducado(informativos: list[str]) -> dict[str, object]:
 def test_caducado_con_sello_de_tsa_no_confiable_es_cuestion_de_confianza() -> None:
     info = lector_c2pa.interpreta(_caducado(["timeStamp.untrusted"]), "Invalid")
     assert info.estado == "valido" and info.no_confiable and info.fallos == ()
+    assert info.caducidad_por_tsa
 
 
 def test_caducado_sin_sello_de_tiempo_es_un_fallo() -> None:

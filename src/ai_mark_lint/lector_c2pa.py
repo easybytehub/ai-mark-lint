@@ -54,6 +54,8 @@ class C2paInfo:
     fallos: tuple[str, ...] = ()
     fallos_cawg: tuple[str, ...] = ()
     no_confiable: bool = False
+    caducidad_por_tsa: bool = False
+    """El certificado caducó y su validez al firmar depende de una TSA no confiable."""
     actualizacion: bool = False
     etiqueta: str = ""
     version_claim: int | None = None
@@ -138,7 +140,10 @@ def interpreta(
     # caducó, sale `signingCredential.expired`. Eso depende de confiar en la TSA, no del
     # fichero. Sin sello de tiempo, en cambio, la caducidad es un fallo real.
     informativos = {str(v.get("code", "")) for v in resultados.get("informational", [])}
-    if "timeStamp.untrusted" in informativos and "signingCredential.expired" in fallos:
+    caducidad_por_tsa = (
+        "timeStamp.untrusted" in informativos and "signingCredential.expired" in fallos
+    )
+    if caducidad_por_tsa:
         fallos = tuple(c for c in fallos if c != "signingCredential.expired")
         no_confiable = True
 
@@ -185,6 +190,7 @@ def interpreta(
         fallos=fallos,
         fallos_cawg=cawg,
         no_confiable=no_confiable,
+        caducidad_por_tsa=caducidad_por_tsa,
         actualizacion=actualizacion,
         etiqueta=etiqueta,
         version_claim=manifiesto.get("claim_version"),

@@ -124,6 +124,8 @@ class EtiquetaAigc:
     crudo: str
     campos: dict[str, str] | None
     error: str = ""
+    doble: bool = False
+    """El valor es una cadena JSON que contiene el objeto (codificado dos veces)."""
 
 
 def interpreta_aigc(ubicacion: str, crudo: str) -> EtiquetaAigc:
@@ -134,9 +136,20 @@ def interpreta_aigc(ubicacion: str, crudo: str) -> EtiquetaAigc:
         obj = json.loads(crudo)
     except json.JSONDecodeError as exc:
         return EtiquetaAigc(ubicacion, crudo, None, f"not JSON: {exc.msg}")
+    # Hay generadores que guardan el objeto ya serializado como cadena JSON (lo midió el
+    # estudio S6 de EasyxLab en Commons). La marca existe y se cuenta, pero quien lea una
+    # sola vez, como describen las guías, no la encuentra: CN-45438-006.
+    doble = False
+    if isinstance(obj, str):
+        try:
+            interior = json.loads(obj)
+        except json.JSONDecodeError:
+            interior = None
+        if isinstance(interior, dict):
+            obj, doble = interior, True
     if isinstance(obj, dict) and set(obj) == {"AIGC"} and isinstance(obj["AIGC"], dict):
         obj = obj["AIGC"]
     if not isinstance(obj, dict):
         return EtiquetaAigc(ubicacion, crudo, None, "the JSON is not an object")
     campos = {str(k): ("" if v is None else str(v)) for k, v in obj.items()}
-    return EtiquetaAigc(ubicacion, crudo, campos)
+    return EtiquetaAigc(ubicacion, crudo, campos, doble=doble)

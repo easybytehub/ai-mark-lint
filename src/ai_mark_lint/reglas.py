@@ -75,7 +75,14 @@ def c2pa_validez(m: Marcas) -> list[Hallazgo]:
             m,
             f"The signature is intact, but a certificate (signer “{c.firmante or '?'}”, its "
             "timestamp or an identity credential) does not chain to any configured trust "
-            "anchor. Pass the trust list your verifier uses with --trust-anchors.",
+            "anchor. Pass the trust list your verifier uses with --trust-anchors."
+            + (
+                "\nThe signer's certificate has expired. It was valid when signed only if you "
+                "trust the time-stamp authority; a validator without that TSA in its trust "
+                "list rejects the manifest (C2PA 2.2 § 15.8.2)."
+                if c.caducidad_por_tsa
+                else ""
+            ),
         )
     return out + _cawg(m)
 
@@ -295,6 +302,14 @@ def china(m: Marcas) -> list[Hallazgo]:
         if e.campos is None:
             out += _h("CN-45438-002", m, f"{e.ubicacion}: {e.error}.\nValue: {e.crudo[:200]}")
             continue
+        if e.doble:
+            out += _h(
+                "CN-45438-006",
+                m,
+                f"{e.ubicacion}: the value is a JSON string that contains the label object.\n"
+                "A reader that parses it once, as the TC260 guides describe, gets a string "
+                f"and misses the label. Value: {e.crudo[:200]}",
+            )
         faltan = [k for k in CLAVES_AIGC if not e.campos.get(k, "").strip()]
         if faltan:
             out += _h(

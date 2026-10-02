@@ -316,6 +316,8 @@ def genera(raiz: Path) -> None:
     w("png/c2pa-ia.png", f.firma(png, "image/png", creada()))
     w("png/aigc.png", png_chunk(png, b"tEXt", b"AIGC\x00" + json.dumps({"AIGC": AIGC}).encode()))
     w("png/iptc-ia.png", png_itxt_xmp(png, xmp(IPTC + "compositeWithTrainedAlgorithmicMedia")))
+    doble = json.dumps(json.dumps(AIGC, ensure_ascii=False))
+    w("png/aigc-doble.png", png_chunk(png, b"tEXt", b"AIGC\x00" + doble.encode()))
     w("png/aigc-json-roto.png", png_chunk(png, b"tEXt", b'AIGC\x00{"Label":"1",'))
     sin_id = {k: v for k, v in AIGC.items() if k != "ProduceID"}
     w("png/aigc-incompleto.png", png_chunk(png, b"tEXt", b"AIGC\x00" + json.dumps(sin_id).encode()))

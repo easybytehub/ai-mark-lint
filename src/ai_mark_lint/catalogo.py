@@ -201,6 +201,7 @@ _REGLAS = (
         f"{CN_ART5}; {CN_TC260}",
         URL_CN_TC260,
     ),
+    Regla("CN-45438-006", A, "The AIGC label is JSON-encoded twice", CN_TC260, URL_CN_TC260),
     # --- Before/after -------------------------------------------------------------------
     Regla("DIFF-001", E, "The pipeline removed the C2PA manifest", "", URL_C2PA),
     Regla("DIFF-002", E, "The pipeline invalidated the C2PA manifest", "", URL_C2PA),
