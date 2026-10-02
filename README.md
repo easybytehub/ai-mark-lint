@@ -1,5 +1,7 @@
 # ai-mark-lint
 
+<img alt="EasyxLab tool" src="https://raw.githubusercontent.com/easybytehub/ai-mark-lint/main/.github/badge-tool.svg">
+
 **Checks, in CI or locally, that the synthetic images, video and audio you generate or
 publish still carry the machine-readable AI marks the law asks for — and cites the
 article for every finding.**
@@ -49,7 +51,7 @@ matches.)
   system's outputs through it on every change, so a refactor that drops the
   `digitalSourceType` or breaks the signature shows up in the pull request.
 - **Anyone who publishes synthetic media through a pipeline** (CMS, image CDN,
-  transcoder): run the before/after mode on each step. The EasyByte Lab S3 study measured
+  transcoder): run the before/after mode on each step. The EasyxLab S3 study measured
   that **no "keep metadata" option preserved C2PA after re-encoding (0/136)**, and that
   editing one field with exiftool after signing **leaves the manifest in the file with a
   broken signature (6/6)** — a check that only asks "is there a manifest?" passes it.
@@ -215,4 +217,8 @@ not. When a rule and the law disagree, the law is right and the rule is a bug.
 
 ## Maintained by
 
-EasyByte Hub S. Coop. Mad. — a software cooperative in Spain. https://easybyte.es
+EasyxLab, the research lab of EasyByte Hub S. Coop. Mad., a software cooperative in Spain.
+
+---
+
+EasyxLab · a research lab by [EasyByte](https://easybyte.es)

@@ -2,7 +2,13 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: SemVer.
 
-## [0.1.0] — unreleased
+## [Unreleased]
+
+### Changed
+- The lab behind the tool is now called EasyxLab; one diagnostic message that cites
+  its S3 study uses the new name.
+
+## [0.1.0] — 2026-10-02
 
 First release.
 
@@ -32,5 +38,5 @@ First release.
   workflow (build, provenance attestation, GitHub Release, PyPI via Trusted Publishing
   once enabled). Every third-party action pinned by SHA with its exact version.
 - Tests: fixtures built at test time with a throwaway CA (no private key in the
-  repository), 13 before/after pairs from the EasyByte Lab S3 study and four public
+  repository), 13 before/after pairs from the EasyxLab S3 study and four public
   c2pa-rs fixtures that reproduce the false positives of an adversarial review.

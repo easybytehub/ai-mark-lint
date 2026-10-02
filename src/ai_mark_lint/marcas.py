@@ -6,7 +6,7 @@ etiqueta con un Label raroâ€” sin tener que fabricar el fichero que lo contendrÃ
 permite que el modo `--antes/--despues` compare dos inventarios en vez de dos ficheros.
 
 Los identificadores de marca (`c2pa`, `iptc-dst`, `aigc`) son los mismos que usa el
-estudio S3 de EasyByte Lab sobre supervivencia de marcas en pipelines, para que los
+estudio S3 de EasyxLab sobre supervivencia de marcas en pipelines, para que los
 resultados de uno y otro se puedan cruzar.
 """
 

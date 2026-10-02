@@ -100,7 +100,7 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 - **Source:** C2PA 2.2, “Validation” — <https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html> (accessed 2026-10-02)
 - **How it is checked:** any failure code on the active manifest that is neither a
   trust code (`*.untrusted`, see C2PA-003) nor a CAWG code (`cawg.*`, see C2PA-009). This is the “present but
-  invalid” case the EasyByte Lab S3 study measured in 6 out of 6 exiftool edits after
+  invalid” case the EasyxLab S3 study measured in 6 out of 6 exiftool edits after
   signing: **a check that only asks “is there a manifest?” passes it.**
 
 ### C2PA-003 — Trust in the signer could not be established

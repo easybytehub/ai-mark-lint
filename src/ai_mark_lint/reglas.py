@@ -48,7 +48,7 @@ def c2pa_validez(m: Marcas) -> list[Hallazgo]:
             "C2PA-008",
             m,
             f"{c.error}.\nThere is no embedded manifest, only a link (XMP dcterms:provenance). "
-            "ai-mark-lint never follows links, and the EasyByte Lab S3 study measured that, "
+            "ai-mark-lint never follows links, and the EasyxLab S3 study measured that, "
             "when the link survives in a derivative, the hash fails against the original's "
             "manifest (3 out of 3). It does not count as a mark.",
         )

@@ -1,7 +1,7 @@
-"""Los pares antes/después del estudio S3 de EasyByte Lab.
+"""Los pares antes/después del estudio S3 de EasyxLab.
 
 Ficheros copiados, sin modificar, de
-`easybyte-lab/studies/s3-ai-marks-survival/fixtures/` (ver `fixtures/s3/README-S3.md`).
+`easyxlab/studies/s3-ai-marks-survival/fixtures/` (ver `fixtures/s3/README-S3.md`).
 Los firmó S3 con el certificado de *prueba* de c2patool 0.27.22, y las salidas las
 produjeron herramientas reales —sharp, ImageMagick, Pillow, ffmpeg, exiftool, el
 optimizador de next/image—, no este repositorio. Por eso son la mejor prueba de que

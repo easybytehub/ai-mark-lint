@@ -28,9 +28,9 @@ These need ffmpeg, so they are committed. Regenerate them with
 generated tree (including the throwaway key) to DIR for inspection — keep DIR outside
 the repository.
 
-## `s3/` — copied from the EasyByte Lab S3 study
+## `s3/` — copied from the EasyxLab S3 study
 
-Copied unmodified from `easybyte-lab/studies/s3-ai-marks-survival/fixtures/`
+Copied unmodified from `easyxlab/studies/s3-ai-marks-survival/fixtures/`
 (`img/*-all-remote.*`, `av/mp4-all.mp4` and all of `derived/`) on 2026-10-02. Their
 original README is `s3/README-S3.md`. S3 signed them with the c2patool 0.27.22 *test*
 certificate; a signed file does not contain the key. The derivatives were produced by
