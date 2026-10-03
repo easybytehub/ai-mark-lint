@@ -2,6 +2,20 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: SemVer.
 
+## [0.1.2] — 2026-10-03
+
+### Added
+- **CN-45438-006 (warning): the AIGC label is JSON-encoded twice.** Some generators
+  store the label object as a JSON *string*. ai-mark-lint 0.1.0–0.1.1 reported it as
+  CN-45438-002 and did not count the file as marked; it now reads the label, counts it,
+  and warns that a reader following the TC260 guides would miss it. Found by EasyxLab
+  study S6 on Wikimedia Commons (3 files).
+
+### Changed
+- When C2PA-003 comes from a certificate that expired after a time-stamped signature with
+  an untrusted time-stamp authority, the message now says so. SPEC documents why this is
+  reported as a trust question rather than a rejection, quoting C2PA 2.2 § 15.8.2.
+
 ## [0.1.1] — 2026-10-03
 
 ### Fixed

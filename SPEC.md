@@ -377,7 +377,7 @@ technically feasible and reasonable” and may be given through a link.
 
 - **Severity:** warning
 - **Literal:** the TC260 guides set the label value as a JSON object.
-- **Source:** <https://www.tc260.org.cn/> (TC260 practice guides; accessed 2026-10-03)
+- **Source:** <https://www.tc260.org.cn/> (TC260 practice guides; accessed 2026-10-02)
 - **How it is checked:** the value parses as a JSON *string* whose content parses as the
   label object. The label is counted as a mark, but a reader that parses it once, as the
   guides describe, misses it. Seen on Wikimedia Commons by EasyxLab study S6.
