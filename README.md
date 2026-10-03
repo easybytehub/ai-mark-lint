@@ -139,7 +139,7 @@ jobs:
         with:
           persist-credentials: false
       - run: python generate_samples.py --out samples/   # your system's real outputs
-      - uses: easybytehub/ai-mark-lint@bc541490999b66698e30516c812d4c8e3bd89c03  # v0.1.1
+      - uses: easybytehub/ai-mark-lint@ad434de28e1559df7e1f652f8951711f5e2b52e5  # v0.1.2
         with:
           files: |
             samples/*.jpg
