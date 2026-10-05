@@ -9,7 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
   store the label object as a JSON *string*. ai-mark-lint 0.1.0–0.1.1 reported it as
   CN-45438-002 and did not count the file as marked; it now reads the label, counts it,
   and warns that a reader following the TC260 guides would miss it. Found by EasyxLab
-  study S6 on Wikimedia Commons (3 files).
+  study S6 (withdrawn on 2026-10-05).
 
 ### Changed
 - When C2PA-003 comes from a certificate that expired after a time-stamped signature with
@@ -25,8 +25,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
   or Microsoft's C2PA OID were reported as `signingCredential.invalid` — among them
   OpenAI's 2026 certificates (issued by Trufo, on the official C2PA Trust List) and
   Microsoft's. ai-mark-lint now always passes c2pa-rs's own default EKU list. Found by
-  EasyxLab study S6, which measured 187 such false errors among 623 manifests on
-  Wikimedia Commons.
+  EasyxLab study S6 (withdrawn on 2026-10-05).
 - **A certificate that expired after a time-stamped signature is no longer an error
   when the time-stamp authority is not trusted.** c2pa-rs then checks the certificate
   at today's date; whether it was valid when signed depends on trusting that TSA, so it
