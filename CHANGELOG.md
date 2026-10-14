@@ -8,19 +8,29 @@ First release on PyPI. No change in the rules or their results.
 
 ### Fixed
 - README: the S3 figure for C2PA after re-encoding is 0/124, the outputs of Pillow,
-  sharp, `next/image`, ImageMagick and ffmpeg. The 0/136 it gave also counted 12
-  ExifTool strip/restore outputs, which are not re-encodings.
+  sharp (also with the call chain of the `next/image` optimizer), ImageMagick and
+  ffmpeg. The 0/136 it gave also counted 12 ExifTool strip/restore outputs, which are
+  not re-encodings.
 - README: `pip install ai-mark-lint` is marked as pending publication on PyPI, with the
   command that works until then; links to SPEC, LICENSE and the fixtures are absolute,
   so they also work on PyPI.
-- Two code comments no longer cite the withdrawn S6 study.
+- Two code comments and one SPEC note no longer cite the withdrawn S6 study.
+- README: editing a field with exiftool after signing does not break the signature, as
+  it said: the signature still verifies, and the manifest is invalid because the content
+  hash it signs no longer matches the file.
+- README and the fixtures README: the S3 `next/image` pairs were made by sharp with the
+  call chain of the `next/image` optimizer, not by Next.js itself.
 
 ### Changed
 - SPEC compares the C2PA sections it quotes with C2PA 2.4 (April 2026) and explains
-  why it keeps citing 2.2.
+  why it keeps citing 2.2. The requirement that a `c2pa.opened` action reference its
+  ingredient, which 2.4 repeats in § 18.15.2, was already in 2.2 (§ 18.14.4.7 and
+  § 15.10.3.2.2): c2pa-rs enforces it and ai-mark-lint reports it as C2PA-002, now
+  pinned by a fixture.
 - The release workflow runs the tests, ruff and mypy before building.
 - CI still runs the GitHub Action on the S3 fixtures, but no longer uploads their SARIF
-  to code scanning: those files break the rules on purpose.
+  to code scanning: those files break the rules on purpose. It checks instead that the
+  SARIF is version 2.1.0 and has findings.
 
 ## [0.1.2] — 2026-10-03
 

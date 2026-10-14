@@ -13,9 +13,11 @@ session, `tests/conftest.py` copies this folder to a temporary directory and cal
 
 What each fixture must trigger is the `ESPERADO` table in `tests/test_reglas.py`.
 
-Two fixtures are built defective on purpose with c2pa-rs's post-signing verification
+Three fixtures are built defective on purpose with c2pa-rs's post-signing verification
 turned off, because the library refuses to sign them: `jpeg/c2pa-sin-dst.jpg`
-(`c2pa.created` without `digitalSourceType`) and `jpeg/c2pa-dst-raro.jpg`.
+(`c2pa.created` without `digitalSourceType`), `jpeg/c2pa-dst-raro.jpg` and
+`jpeg/c2pa-opened-sin-ingrediente.jpg` (`c2pa.opened` that does not reference its
+ingredient).
 
 ## Committed here
 
@@ -34,5 +36,6 @@ Copied unmodified from `easyxlab/studies/s3-ai-marks-survival/fixtures/`
 (`img/*-all-remote.*`, `av/mp4-all.mp4` and all of `derived/`) on 2026-10-02. Their
 original README is `s3/README-S3.md`. S3 signed them with the c2patool 0.27.22 *test*
 certificate; a signed file does not contain the key. The derivatives were produced by
-real tools (sharp, ImageMagick, Pillow, ffmpeg, exiftool, next/image). The expected
-result for each pair is in `tests/test_s3.py`.
+real tools (sharp, ImageMagick, Pillow, ffmpeg, exiftool) and by sharp with the call
+chain of the next/image optimizer. The expected result for each pair is in
+`tests/test_s3.py`.

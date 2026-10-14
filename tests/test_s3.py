@@ -68,8 +68,8 @@ def test_los_originales_de_s3_llevan_las_tres_marcas(original: str) -> None:
 
 def test_presente_pero_invalido_no_pasa_por_bueno() -> None:
     """El fallo silencioso que midió S3 (6 de 6): editar un campo tras firmar deja el
-    manifiesto en el fichero con la firma rota. Mirar sólo si hay manifiesto lo daría
-    por bueno."""
+    manifiesto en el fichero, pero inválido: el hash del contenido ya no coincide. Mirar
+    sólo si hay manifiesto lo daría por bueno."""
     m = inventaria(S3 / "derivados" / "jpg-all-remote__exiftool_edit_title.jpg")
     assert m.c2pa.estado == "invalido" and "assertion.dataHash.mismatch" in m.c2pa.fallos
     hallazgos = {h.regla for h in audita(m, ("eu",))}

@@ -31,6 +31,7 @@ ESPERADO: dict[str, set[str]] = {
     "jpeg/c2pa-captura.jpg": {"C2PA-003", "EU-50-2-001", "CN-45438-001"},
     "jpeg/c2pa-dst-raro.jpg": {"C2PA-003", "C2PA-006", "EU-50-2-001", "CN-45438-001"},
     "jpeg/c2pa-sin-dst.jpg": {"C2PA-002", "C2PA-005", "EU-50-2-001", "CN-45438-001"},
+    "jpeg/c2pa-opened-sin-ingrediente.jpg": {"C2PA-002", "EU-50-2-001", "CN-45438-001"},
     "jpeg/c2pa-manipulado.jpg": {"C2PA-002", "EU-COP-001", "CN-45438-001"},
     "jpeg/c2pa-roto.jpg": {"C2PA-001", "EU-50-2-001", "CA-942-001", "CN-45438-001"},
     "jpeg/contradiccion.jpg": {"C2PA-003", "MARK-001", "EU-COP-001", "CN-45438-001"},
@@ -153,6 +154,14 @@ def test_primera_accion_que_no_es_created_ni_opened(accion: str) -> None:
 def test_opened_sin_digital_source_type_es_valido() -> None:
     c = replace(C2PA_OK, primera_accion={"action": "c2pa.opened"})
     assert not {"C2PA-004", "C2PA-005"} & _reglas(_m(c))
+
+
+def test_opened_sin_ingrediente_lo_rechaza_c2pa_rs() -> None:
+    """C2PA 2.2 ya exigía que c2pa.opened referenciara su ingrediente (§ 18.14.4.7 y
+    § 15.10.3.2.2); la 2.4 lo repite en § 18.15.2. Sale como C2PA-002."""
+    m = inventaria(FIX / "jpeg/c2pa-opened-sin-ingrediente.jpg")
+    assert m.c2pa.estado == "invalido"
+    assert "assertion.action.ingredientMismatch" in m.c2pa.fallos
 
 
 def test_a_un_claim_v1_no_se_le_aplica_la_18_14_2() -> None:

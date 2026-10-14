@@ -278,6 +278,11 @@ def genera(raiz: Path) -> None:
         "jpeg/c2pa-dst-raro.jpg",
         f.firma(base, "image/jpeg", creada("inventadoPorMi"), sin_verificar=True),
     )
+    # c2pa.opened sin ingrediente: C2PA 2.2 ya lo exigía (§ 18.14.4.7 y § 15.10.3.2.2).
+    w(
+        "jpeg/c2pa-opened-sin-ingrediente.jpg",
+        f.firma(base, "image/jpeg", {"action": "c2pa.opened", "when": CUANDO}, sin_verificar=True),
+    )
     # Firmado con el perfil de los certificados C2PA reales (OpenAI vía Trufo): EKU de firma
     # de claims C2PA más documentSigning, sin emailProtection. ai-mark-lint 0.1.0 lo daba
     # por inválido (C2PA-002) porque c2pa-rs no recibía su lista de EKU.

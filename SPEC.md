@@ -26,7 +26,7 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 | China: CAC *Measures for Labeling AI-Generated Synthetic Content* (人工智能生成合成内容标识办法) | In force since **1 September 2025** (Art. 14). | <https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm> |
 | China: **GB 45438-2025** (网络安全技术 人工智能生成合成内容标识方法) | Published 2025-02-28, in force **2025-09-01**, status 现行 (current) on openstd. `GB` prefix without `/T`: mandatory. **The text of the standard could not be read** (openstd only serves it in an image viewer); its Annex E is known through the TC260 guides that reproduce it. | <https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F32EA2A561F1886CD8D606513512D547> |
 | TC260 practice guides TC260-PG-20257A (video), 20258A (text), 20259A (image), 202510A (audio), V1.0-202508 | Published by the TC260 committee, “基于 GB 45438-2025”. They fix where the AIGC field goes in each format. | PDFs linked from <https://www.tc260.org.cn/tc260/sjzn/list_2.shtml> |
-| C2PA Technical Specification 2.2 (May 2025) | **Cited version; not the latest.** 2.3 (December 2025) and 2.4 (April 2026) are out. Compared with 2.4 on 2026-10-14: § 15.5.5 (“Validating a Match”), § 15.8.2 and the Digital Source Type list (§ 18.14.4.5, now § 18.15.4.5) say the same; § 15.7 is reworded and keeps the failure code `signingCredential.untrusted`; § 18.14.2 (now § 18.15.2) is **stricter**: the mandatory actions assertion must be in `created_assertions` (2.2 also allowed `gathered_assertions`), and a `c2pa.opened` action must reference its ingredient. ai-mark-lint checks neither of the two, so the literals below stay those of 2.2: citing 2.4 would claim more than the tool checks. | 2.2: <https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html>; 2.4: <https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html> (version history in its § 5.3) |
+| C2PA Technical Specification 2.2 (May 2025) | **Cited version; not the latest.** 2.3 (December 2025) and 2.4 (April 2026) are out. Compared with 2.4 on 2026-10-14: § 15.5.5 (“Validating a Match”) and the Digital Source Type list (§ 18.14.4.5, now § 18.15.4.5) say the same; § 15.8.2 keeps the sentence quoted under C2PA-003 and adds an optional informational code, `timeStamp.credentialInvalid`; § 15.7 is reworded and keeps the failure code `signingCredential.untrusted`; § 18.14.2 (now § 18.15.2) is **stricter**: the mandatory actions assertion must be in `created_assertions` (2.2 also allowed `gathered_assertions`). It also now says that a `c2pa.opened` action must reference its ingredient, which 2.2 already required in § 18.14.4.7 and § 15.10.3.2.2; c2pa-rs enforces it (`assertion.action.ingredientMismatch`, reported as C2PA-002). ai-mark-lint does not check the `created_assertions` requirement, so the literals below stay those of 2.2: citing 2.4 would claim more than the tool checks. | 2.2: <https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html>; 2.4: <https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html> (version history in its § 5.3) |
 | IPTC Photo Metadata Standard 2025.1 and the Digital Source Type vocabulary | Current (vocabulary released 2024-10-23). | <https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata>, <https://cv.iptc.org/newscodes/digitalsourcetype/> |
 
 **What could NOT be verified:**
@@ -136,9 +136,12 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 - **How it is checked:** in the active manifest (claim v2 or later; not applied to v1
   claims, nor to Update Manifests — recognised because they carry no hard-binding
   `c2pa.hash.*` assertion) there is no `c2pa.actions*` assertion, or its first action is
-  neither `c2pa.created` nor `c2pa.opened`. It does not check the two requirements C2PA
-  2.4 added to this section (see “Sources and their status”): it reads the actions
-  assertions from the manifest's assertion list without telling created from gathered.
+  neither `c2pa.created` nor `c2pa.opened`. It does not check the requirement C2PA 2.4
+  added to this section, that the actions assertion be in `created_assertions` (see
+  “Sources and their status”): it reads the actions assertions from the manifest's
+  assertion list without telling created from gathered. A `c2pa.opened` action that
+  does not reference its ingredient is rejected by c2pa-rs
+  (`assertion.action.ingredientMismatch`) and reported as C2PA-002.
 
 ### C2PA-005 — The c2pa.created action does not declare a digitalSourceType
 
@@ -382,7 +385,7 @@ technically feasible and reasonable” and may be given through a link.
 - **Source:** <https://www.tc260.org.cn/> (TC260 practice guides; accessed 2026-10-02)
 - **How it is checked:** the value parses as a JSON *string* whose content parses as the
   label object. The label is counted as a mark, but a reader that parses it once, as the
-  guides describe, misses it. Seen on Wikimedia Commons by EasyxLab study S6 (withdrawn on 2026-10-05).
+  guides describe, misses it.
 
 ## Before/after comparison (`--before A --after B`)
 

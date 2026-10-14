@@ -42,21 +42,22 @@ compliance, and invisible watermarks were not checked.
 ```
 
 (That pair is real: a file signed with the c2patool test certificate, then one field
-edited with exiftool. The manifest is still in the file; its signature no longer
-matches.)
+edited with exiftool. The manifest is still in the file and its signature still
+verifies, but the content hash it signs no longer matches the file.)
 
 ## Who it is for
 
 - **Providers of generative systems** that must mark their outputs: put a sample of your
   system's outputs through it on every change, so a refactor that drops the
-  `digitalSourceType` or breaks the signature shows up in the pull request.
+  `digitalSourceType` or invalidates the manifest shows up in the pull request.
 - **Anyone who publishes synthetic media through a pipeline** (CMS, image CDN,
   transcoder): run the before/after mode on each step. The EasyxLab S3 study measured
   that **no re-save, resize or format conversion it tested kept an embedded C2PA
-  manifest, "keep metadata" options included (0/124 outputs of Pillow, sharp,
-  `next/image`, ImageMagick and ffmpeg)**, and that
-  editing one field with exiftool after signing **leaves the manifest in the file with a
-  broken signature (6/6)** — a check that only asks "is there a manifest?" passes it.
+  manifest, "keep metadata" options included (0/124 outputs of Pillow, sharp (also with
+  the call chain of the `next/image` optimizer), ImageMagick and ffmpeg)**, and that
+  editing one field with exiftool after signing **leaves the manifest in the file but
+  invalid: its content hash no longer matches (6/6)** — a check that only asks "is there
+  a manifest?" passes it.
 
 ## What it is, and what it is not
 
@@ -208,8 +209,8 @@ Fixtures are documented in [tests/fixtures/README.md](https://github.com/easybyt
 private key is committed:** each test session creates a throwaway test CA in a temporary
 directory, signs the fixtures there and deletes it, and a test fails if a key ever lands
 in the tree. The before/after pairs in `tests/fixtures/s3/` come unmodified from the EasyxLab
-S3 study and were produced by real tools (sharp, ImageMagick, Pillow, ffmpeg,
-exiftool, the next/image optimizer).
+S3 study and were produced by real tools (sharp, ImageMagick, Pillow, ffmpeg, exiftool)
+and by sharp with the call chain of the next/image optimizer.
 
 A rule is a function `Marcas -> list[Hallazgo]`; its ID, severity and citation live once,
 in `src/ai_mark_lint/catalogo.py`, and a test keeps `SPEC.md` in sync. A new rule needs
