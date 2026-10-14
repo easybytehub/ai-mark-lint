@@ -8,7 +8,8 @@ name: ai-mark-lint
 description: >-
   Checks that generated images, video and audio carry machine-readable AI marks
   (C2PA, IPTC DigitalSourceType, the GB 45438 AIGC label), judged against EU AI Act
-  art. 50(2), California SB 942/AB 853 and China GB 45438-2025. Read-only.
+  art. 50(2), California SB 942 (as amended by AB 853 and SB 1000) and China
+  GB 45438-2025. Read-only.
 author: EasyByte Hub, S. Coop. Mad.
 
 branding:

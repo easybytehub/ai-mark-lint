@@ -4,7 +4,36 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 
 ## [0.1.3] — unreleased
 
-First release on PyPI. No change in the rules or their results.
+First release on PyPI. California's law changed on 30 September 2026, two days before
+0.1.0: the California rules now cite the text in force. No rule fires on files where it
+did not fire before, or stops firing where it did.
+
+### Changed — California
+- **The law.** SB 1000 (Stats. 2026, ch. 861), an urgency statute in force since
+  30 September 2026, amended Bus. & Prof. Code §§ 22757.1–22757.5. The latent disclosure
+  moved from § 22757.3(b) to § 22757.3(a): its items are now (a)(1)(A)–(F), with
+  (B) reading “name and version information”, a new (E) “Whether the GenAI system
+  created or altered the content” and, from 1 January 2029, (F) whether the system is
+  designed to primarily function as assistive technology; it is required “to the extent
+  it is technically feasible” (no longer “and reasonable”). The manifest (visible)
+  disclosure is gone. A “covered provider” (now § 22757.1(e)) is anyone who produces a
+  GenAI system publicly accessible in California: the 1,000,000-users threshold is
+  gone. § 22757.3(b) is now the duty to notify licensees. AB 2713 (Stats. 2026,
+  ch. 856), operative 1 January 2027, rewrites § 22757.3.1: the large online platforms'
+  duty not to strip provenance data becomes (c), and AB 853's (b) never applies.
+- **The tool.** CA-942-001 cites § 22757.3(a) and CA-942-002 to CA-942-005 cite
+  § 22757.3(a)(1)(A)–(D), “SB 942, as amended by AB 853 and SB 1000”, and link to the
+  § 22757.3 page on leginfo. SPEC quotes the text in force, read on 2026-10-14. The
+  CA-942-001 message no longer says that only systems with over 1,000,000 monthly users
+  are bound; it quotes § 22757.1(e). The note on CA-942-002 to CA-942-005 quotes
+  “to the extent it is technically feasible”. With `ca`, before/after findings cite
+  § 22757.3.1(c) as amended by AB 2713 instead of § 22757.3.1(b) of AB 853. Rule IDs
+  are unchanged: SB 942 is still the act's bill.
+- **Not checked**, and now said in SPEC and README: item (E), and item (F), which only
+  applies from 2029. The README no longer cites § 22757.3(a) as a visible-label duty;
+  no rule checked the manifest disclosure, so none is withdrawn.
+- The descriptions in `action.yml` and `pyproject.toml` name SB 942 as amended by AB 853
+  and SB 1000.
 
 ### Fixed
 - README: the S3 figure for C2PA after re-encoding is 0/124, the outputs of Pillow,

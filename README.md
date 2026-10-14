@@ -13,8 +13,10 @@ implicit label** of China's GB 45438-2025 — and checks them against:
 - **EU AI Act, art. 50(2)** — applicable since 2 August 2026 (2 December 2026 for systems
   already on the market, per the Digital Omnibus, Regulation (EU) 2026/1744), and the
   Commission's **Code of Practice on Transparency of AI-Generated Content**.
-- **California AI Transparency Act** (SB 942 as amended by AB 853, Bus. & Prof. Code
-  §§ 22757–22757.6) — operative since 2 August 2026; platform duties from 1 January 2027.
+- **California AI Transparency Act** (SB 942 as amended by AB 853 and SB 1000, Bus. &
+  Prof. Code §§ 22757–22757.6) — operative since 2 August 2026, with the latent
+  disclosure rewritten by SB 1000 on 30 September 2026; duties of large online platforms
+  (§ 22757.3.1, as amended by AB 2713) from 1 January 2027.
 - **China**: the CAC *Measures for Labeling AI-Generated Synthetic Content* and
   **GB 45438-2025**, in force since 1 September 2025, with the TC260 practice guides that
   fix where the label goes in each file format.
@@ -34,7 +36,7 @@ ERROR        DIFF-002 [edited.jpg]: The pipeline invalidated the C2PA manifest
              original as an ingredient, or do not touch the bytes.
              citation: Regulation (EU) 2024/1689 (AI Act), Art. 50(2); Code of Practice
              on Transparency of AI-Generated Content, Measure 1.2; Cal. Bus. & Prof. Code
-             § 22757.3.1(b) (AB 853; operative January 1, 2027)
+             § 22757.3.1(c), as amended by AB 2713 (operative January 1, 2027)
 
 1 error · 0 warnings · 0 undetermined
 Zero errors means these rules found no breach in the metadata; it does not certify
@@ -72,13 +74,16 @@ a file with no metadata marks is a **warning** for the EU and California, not an
 it may be compliant through a watermark this tool cannot see. Only in China, where the
 rules say the label goes in the file metadata, is its absence an **error**.
 
-**It does not cover deepfake disclosure** (art. 50(4)), visible labels (Cal. § 22757.3(a),
-China's explicit labels) or text.
+**It does not cover deepfake disclosure** (art. 50(4)), visible labels (China's explicit
+labels; California has required none since SB 1000) or text. Of California's latent
+disclosure it does not check item (E), whether the GenAI system created or altered the
+content, nor (F), which only applies from 1 January 2029.
 
 **A clean result does not certify compliance.** It means these rules found no breach in
-the metadata of these files. Whether you are a "covered provider" (California's
-1,000,000-monthly-users threshold), a signatory of the Code of Practice, or a service
-provided in China is not something a file can tell.
+the metadata of these files. Whether you are a "covered provider" (in California,
+anyone whose GenAI system is publicly accessible in the state: SB 1000 removed the
+1,000,000-users threshold), a signatory of the Code of Practice, or a service provided
+in China is not something a file can tell.
 
 **It never goes to the network.** A file may point to a remote manifest; following that
 link would make a CI linter an HTTP client steered by the file it audits. A remote
@@ -176,7 +181,7 @@ it is checked: **[SPEC.md](https://github.com/easybytehub/ai-mark-lint/blob/main
 | C2PA | manifest unreadable (error) · fails validation, e.g. content changed after signing (error) · signer, timestamp or identity credential not trusted (undetermined) · CAWG identity assertion fails *[unverified]* · first action not `c2pa.created`/`c2pa.opened` (error) · `c2pa.created` without `digitalSourceType` (error) · unknown source type · remote reference only |
 | IPTC / XMP | `DigitalSourceType` not a vocabulary URI · unreadable XMP · C2PA and IPTC contradict each other |
 | EU | no machine-readable AI mark in metadata · AI mark only in unsigned metadata · signed manifest without a timestamp (Code of Practice 1.1.1) |
-| California | no latent disclosure · missing provider name, system name and version, creation time or unique identifier (§ 22757.3(b)(1)(A)–(D)) |
+| California | no latent disclosure · missing provider name, system name and version, creation time or unique identifier (§ 22757.3(a)(1)(A)–(D)). Not checked: (E) whether the system created or altered the content; (F) applies from 1 January 2029 |
 | China | no `AIGC` label where the TC260 guides put it · not JSON · missing `Label`/`ContentProducer`/`ProduceID` *[unverified]* · unknown `Label` value *[unverified]* · conflicting labels |
 | Before/after | C2PA removed · C2PA invalidated · IPTC AI type removed (error) or changed (warning) · AIGC removed · AIGC producer data rewritten · new manifest no longer declares AI |
 
