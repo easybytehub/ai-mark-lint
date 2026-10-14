@@ -36,7 +36,9 @@ def test_every_spec_rule_has_literal_source_date_and_severity() -> None:
         if rid.startswith(("FMT", "XMP")):
             continue
         assert "**Literal:**" in texto, rid
-        assert "**Source:**" in texto and "accessed 2026-10-02" in texto, rid
+        # California se releyó tras SB 1000 y AB 2713 (30-sep-2026); el resto, el 2-oct.
+        fecha = "2026-10-14" if rid.startswith("CA-") else "2026-10-02"
+        assert "**Source:**" in texto and f"accessed {fecha}" in texto, rid
         assert "**How it is checked:**" in texto, rid
 
 

@@ -47,7 +47,7 @@ def test_una_plataforma_que_anade_propagador_no_es_hallazgo() -> None:
     ("js", "dentro", "fuera"),
     [
         (("eu",), "Art. 50(2)", "22757"),
-        (("ca",), "22757.3.1(b)", "50(2)"),
+        (("ca",), "22757.3.1(c), as amended by AB 2713", "50(2)"),
         (("cn",), "Art. 10", "50(2)"),
     ],
 )

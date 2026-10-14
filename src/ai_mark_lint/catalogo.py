@@ -19,8 +19,8 @@ URL_AIA_50 = "https://artificialintelligenceact.eu/article/50/"
 URL_AIA_111 = "https://artificialintelligenceact.eu/article/111/"
 URL_COP = "https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content"
 URL_CA = (
-    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml"
-    "?lawCode=BPC&division=8.&title=&part=&chapter=25.&article="
+    "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml"
+    "?lawCode=BPC&sectionNum=22757.3."
 )
 URL_CN_CAC = "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm"
 URL_CN_GB = "https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F32EA2A561F1886CD8D606513512D547"
@@ -35,8 +35,11 @@ AIA_111_4 = (
 )
 COP_111 = "Code of Practice on Transparency of AI-Generated Content, Sub-measure 1.1.1"
 COP_12 = "Code of Practice on Transparency of AI-Generated Content, Measure 1.2"
-CA_3B = "Cal. Bus. & Prof. Code § 22757.3(b) (SB 942, as amended by AB 853)"
-CA_31B = "Cal. Bus. & Prof. Code § 22757.3.1(b) (AB 853; operative January 1, 2027)"
+# SB 1000 (en vigor el 30-sep-2026) movió la divulgación latente de la (b) a la (a).
+CA_3A = "Cal. Bus. & Prof. Code § 22757.3(a)"
+CA_LEY = "(SB 942, as amended by AB 853 and SB 1000)"
+# El (b) de AB 853 nunca llega a ser operativo: AB 2713 lo sustituye el 1-ene-2027 por el (c).
+CA_31C = "Cal. Bus. & Prof. Code § 22757.3.1(c), as amended by AB 2713 (operative January 1, 2027)"
 CN_MEDIDAS = (
     "CAC Measures for Labeling AI-Generated Synthetic Content (人工智能生成合成内容标识办法)"
 )
@@ -142,30 +145,34 @@ _REGLAS = (
     Regla("EU-COP-001", A, "The AI mark is only in unsigned metadata", COP_111, URL_COP),
     Regla("EU-COP-002", A, "The signed C2PA manifest has no timestamp", COP_111, URL_COP),
     # --- California ---------------------------------------------------------------------
-    Regla("CA-942-001", A, "No latent disclosure found", CA_3B, URL_CA),
+    Regla("CA-942-001", A, "No latent disclosure found", f"{CA_3A} {CA_LEY}", URL_CA),
     Regla(
         "CA-942-002",
         A,
         "The latent disclosure does not state the provider's name",
-        f"{CA_3B}(1)(A)",
+        f"{CA_3A}(1)(A) {CA_LEY}",
         URL_CA,
     ),
     Regla(
         "CA-942-003",
         A,
         "The latent disclosure does not state the GenAI system's name and version",
-        f"{CA_3B}(1)(B)",
+        f"{CA_3A}(1)(B) {CA_LEY}",
         URL_CA,
     ),
     Regla(
         "CA-942-004",
         A,
         "The latent disclosure does not state the creation date and time",
-        f"{CA_3B}(1)(C)",
+        f"{CA_3A}(1)(C) {CA_LEY}",
         URL_CA,
     ),
     Regla(
-        "CA-942-005", A, "The latent disclosure has no unique identifier", f"{CA_3B}(1)(D)", URL_CA
+        "CA-942-005",
+        A,
+        "The latent disclosure has no unique identifier",
+        f"{CA_3A}(1)(D) {CA_LEY}",
+        URL_CA,
     ),
     # --- China --------------------------------------------------------------------------
     Regla(
@@ -235,7 +242,7 @@ def norma_diff(jurisdicciones: tuple[str, ...]) -> str:
     if "eu" in jurisdicciones:
         partes.append(f"{AIA_50_2}; {COP_12}")
     if "ca" in jurisdicciones:
-        partes.append(CA_31B)
+        partes.append(CA_31C)
     if "cn" in jurisdicciones:
         partes.append(CN_ART10)
     return "; ".join(partes) or "—"

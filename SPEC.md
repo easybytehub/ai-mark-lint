@@ -4,7 +4,9 @@ Every rule has a stable ID, the **literal** sentence of the law or standard that
 supports it, the URL where it was read, the access date, its severity and how it is
 checked. All sources were accessed on **2026-10-02** (the C2PA 2.4 comparison, on 2026-10-14) by downloading the HTML or PDF with
 `curl` and searching for the literal sentence with `grep`; no quotation comes from an
-automatic summary.
+automatic summary. **California was read again on 2026-10-14, in a browser**, after SB 1000
+and AB 2713 were signed on 30 September 2026 (leginfo now answers scripts with a
+403); its rules quote that reading.
 
 **Golden rule:** a requirement that could not be read at its source is tagged
 `[unverified]` and is **never** an `error`. The catalogue
@@ -17,12 +19,13 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 
 ## Sources and their status
 
-| Source | Status on 2026-10-02 | How it was verified |
+| Source | Status on 2026-10-02 (California: 2026-10-14) | How it was verified |
 |---|---|---|
 | AI Act (Regulation (EU) 2024/1689), Art. 50(2) and 113 | In force. Art. 50 applies from **2 August 2026** (Art. 113: “It shall apply from 2 August 2026”, with no exception for Chapter IV). | EUR-Lex returns an empty `202` to `curl` (also via ELI). Text read on artificialintelligenceact.eu (FLI), which reproduces the Official Journal: <https://artificialintelligenceact.eu/article/50/>, <https://artificialintelligenceact.eu/article/113/> |
 | Digital Omnibus on AI = **Regulation (EU) 2026/1744** of 8 July 2026 | Published. **It does not postpone Art. 50(2) in general.** It adds Art. 111(4): systems already on the market before 2 August 2026 have until **2 December 2026**. It amends Art. 50(7) (codes of practice approved by implementing act). | <https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/>, <https://artificialintelligenceact.eu/article/111/> |
 | Code of Practice on Transparency of AI-Generated Content | **Final version published.** “The Commission and the AI Board have confirmed that the code is an adequate voluntary tool to demonstrate compliance”. Page last updated 31 July 2026; about 190 signatories by end of July. Voluntary. | <https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content> and its PDF (`ec.europa.eu/newsroom/dae/redirection/document/129555`) |
-| California AI Transparency Act (SB 942, amended by AB 853) | Bus. & Prof. Code §§ 22757–22757.6. Chapter **operative 2 August 2026** (§ 22757.6). Large online platforms and GenAI hosting platforms: **1 January 2027**. Capture device manufacturers: **1 January 2028**. | leginfo, consolidated text: <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> |
+| California AI Transparency Act (SB 942, as amended by AB 853 and SB 1000) | Bus. & Prof. Code §§ 22757–22757.6. Chapter **operative 2 August 2026** (§ 22757.6, not amended). **SB 1000** (Stats. 2026, ch. 861), an urgency statute approved and filed on 30 September 2026, **in force since that day**, amended §§ 22757.1, 22757.2, 22757.3, 22757.4 and 22757.5: the latent disclosure is now § 22757.3(a) (it was § 22757.3(b)) and adds items (E) and, from 1 January 2029, (F); there is no manifest (visible) disclosure any more; “covered provider” (now § 22757.1(e)) has no 1,000,000-users threshold. GenAI hosting platforms: **1 January 2027**. Capture device manufacturers: **1 January 2028** (these two dates as read on 2026-10-02, in sections SB 1000 does not amend). Status on 2026-10-14. | leginfo, read in a browser on 2026-10-14: <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.1.>, <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.>, <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.6.>; SB 1000 as chaptered: <https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB1000> |
+| California AB 2713 (Stats. 2026, ch. 856) | Approved on 30 September 2026, not an urgency statute: **in force and operative 1 January 2027** (its § 22757.3.1(e)). Rewrites § 22757.3.1 (large online platforms); the duty not to strip provenance data becomes (c). Until then leginfo's § 22757.3.1 still shows AB 853's text, which never becomes operative. Status on 2026-10-14. | Bill text as chaptered, read in a browser on 2026-10-14: <https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB2713> |
 | China: CAC *Measures for Labeling AI-Generated Synthetic Content* (人工智能生成合成内容标识办法) | In force since **1 September 2025** (Art. 14). | <https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm> |
 | China: **GB 45438-2025** (网络安全技术 人工智能生成合成内容标识方法) | Published 2025-02-28, in force **2025-09-01**, status 现行 (current) on openstd. `GB` prefix without `/T`: mandatory. **The text of the standard could not be read** (openstd only serves it in an image viewer); its Annex E is known through the TC260 guides that reproduce it. | <https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=F32EA2A561F1886CD8D606513512D547> |
 | TC260 practice guides TC260-PG-20257A (video), 20258A (text), 20259A (image), 202510A (audio), V1.0-202508 | Published by the TC260 committee, “基于 GB 45438-2025”. They fix where the AIGC field goes in each format. | PDFs linked from <https://www.tc260.org.cn/tc260/sjzn/list_2.shtml> |
@@ -262,40 +265,64 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 
 ## California (`--jurisdiction ca`)
 
+**The law changed on 30 September 2026.** SB 1000 (Stats. 2026, ch. 861), an urgency
+statute in force since that day, rewrote §§ 22757.1–22757.5. The latent disclosure moved
+from § 22757.3(b) to § 22757.3(a) and gained two items, (E) and (F); the manifest
+(visible) disclosure was removed from the chapter; § 22757.3(b) is now the duty to
+notify licensees of their obligations, which no file can show. The literals below are
+the text in force, read on leginfo on 2026-10-14 in a browser.
+
 It only binds *covered providers*: “a person that creates, codes, or otherwise produces
-a generative artificial intelligence system that has over 1,000,000 monthly visitors or
-users and is publicly accessible within the geographic boundaries of the state”
-(§ 22757.1(d)). The tool cannot know whether you are one.
+a generative artificial intelligence system that is publicly accessible within the
+geographic boundaries of the state” (§ 22757.1(e),
+<https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.1.>).
+Until 30 September 2026 the definition (then § 22757.1(d)) also required a system “that
+has over 1,000,000 monthly visitors or users”; SB 1000 removed that threshold. The tool
+cannot know whether you are a covered provider.
+
+What § 22757.3(a) asks, and what the tool checks:
+
+| § 22757.3(a) | Checked by |
+|---|---|
+| (1)(A) the name of the covered provider | CA-942-002 |
+| (1)(B) the name and version information of the GenAI system | CA-942-003 |
+| (1)(C) the time and date of creation or alteration | CA-942-004 |
+| (1)(D) a unique identifier | CA-942-005 |
+| (1)(E) “Whether the GenAI system created or altered the content.” | **Not checked.** The C2PA actions and the IPTC `digitalSourceType` value may express it, but no rule checks that the disclosure says which, nor maps those values to “created” or “altered”. |
+| (1)(F) “On and after January 1, 2029, whether the GenAI system is designed to primarily function as assistive technology.” | **Not checked.** It does not apply until 1 January 2029. |
+| (2) permanent or extraordinarily difficult to remove | Not checked: a single file cannot show it. |
+| (3) compatible with the provider's disclosure verification tool | Not checked. |
+| (4) compliant or interoperable with widely recognized industry standards | CA-942-001, only to the extent that some standard mark (C2PA, IPTC, AIGC) is present. |
 
 ### CA-942-001 — No latent disclosure found
 
 - **Severity:** warning
-- **Literal:** “(b) A covered provider shall include a latent disclosure in
-  AI-generated image, video, or audio content, or content that is any combination
-  thereof, created by the covered provider’s GenAI system that meets all of the
-  following criteria: […] (3) The disclosure is consistent with widely accepted
-  industry standards.” And § 22757.6: “This chapter shall become operative on August 2,
-  2026.”
-- **Source:** Cal. Bus. & Prof. Code § 22757.3(b) — <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Literal:** “(a) To the extent it is technically feasible, a covered provider shall
+  include a latent disclosure that meets all of the following criteria in any image,
+  video, or audio content, or content that is any combination thereof, created or
+  altered, except by minor modification, by the covered provider’s GenAI system: […]
+  (4) The disclosure is compliant or interoperable with widely recognized industry
+  standards.” And § 22757.6: “This chapter shall become operative on August 2, 2026.”
+- **Source:** Cal. Bus. & Prof. Code § 22757.3(a), as amended by SB 1000 — <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.> and <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.6.> (accessed 2026-10-14, in a browser)
 - **How it is checked:** no readable C2PA manifest, no IPTC XMP, no AIGC label. A
   warning: the law does not fix the format, and a watermark or a link could comply.
 
 ### CA-942-002 — The latent disclosure does not state the provider's name
 
 - **Severity:** warning
-- **Literal:** “(1) To the extent that it is technically feasible and reasonable, the
-  disclosure conveys all of the following information, either directly or through a
-  link to a permanent internet website: (A) The name of the covered provider.”
-- **Source:** § 22757.3(b)(1)(A) — <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Literal:** “(1) The disclosure conveys all of the following information, either
+  directly or through a link to a permanent internet website: (A) The name of the
+  covered provider.”
+- **Source:** § 22757.3(a)(1)(A) — <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.> (accessed 2026-10-14, in a browser)
 - **How it is checked:** neither a C2PA signer (`signature_info.issuer` or
   `common_name`) nor an AIGC `ContentProducer`.
 
 ### CA-942-003 — The latent disclosure does not state the GenAI system's name and version
 
 - **Severity:** warning
-- **Literal:** “(B) The name and version number of the GenAI system that created or
-  altered the content.”
-- **Source:** § 22757.3(b)(1)(B) — <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Literal:** “(B) The name and version information of the GenAI system that created
+  or altered the content.”
+- **Source:** § 22757.3(a)(1)(B) — <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.> (accessed 2026-10-14, in a browser)
 - **How it is checked:** no C2PA action with a `softwareAgent` that has a name and a
   version, and no `claim_generator_info` with a version. IPTC and AIGC have no field
   for this.
@@ -304,7 +331,7 @@ users and is publicly accessible within the geographic boundaries of the state�
 
 - **Severity:** warning
 - **Literal:** “(C) The time and date of the content’s creation or alteration.”
-- **Source:** § 22757.3(b)(1)(C) — <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Source:** § 22757.3(a)(1)(C) — <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.> (accessed 2026-10-14, in a browser)
 - **How it is checked:** neither `when` in the C2PA actions nor a TSA signing time.
   (Manifests produced by c2patool with its defaults have neither.)
 
@@ -312,12 +339,12 @@ users and is publicly accessible within the geographic boundaries of the state�
 
 - **Severity:** warning
 - **Literal:** “(D) A unique identifier.”
-- **Source:** § 22757.3(b)(1)(D) — <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Source:** § 22757.3(a)(1)(D) — <https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22757.3.> (accessed 2026-10-14, in a browser)
 - **How it is checked:** no C2PA manifest label (`urn:c2pa:…`), no AIGC `ProduceID`,
   no `xmpMM:InstanceID`/`DocumentID`.
 
-All five CA rules are warnings: the items are required “to the extent that it is
-technically feasible and reasonable” and may be given through a link.
+All five CA rules are warnings: the disclosure is required “to the extent it is
+technically feasible” and its items may be given through a link.
 
 ## China (`--jurisdiction cn`, not on by default)
 
@@ -391,16 +418,23 @@ technically feasible and reasonable” and may be given through a link.
 
 The citation of these findings depends on the jurisdictions requested: EU → Art. 50(2)
 (the published output must be marked) and Code of Practice Measure 1.2; California →
-§ 22757.3.1(b); China → Art. 10 of the Measures. Literals:
+§ 22757.3.1(c) as amended by AB 2713; China → Art. 10 of the Measures. Literals:
 
 - Code of Practice, Measure 1.2 a): “retain, and abstain from intentionally altering or
   removing, existing metadata markings, where such content is used as input and
   subsequently transformed by their AI system into an output.”
-- § 22757.3.1(b): “A large online platform shall not, to the extent technically
-  feasible, knowingly strip any system provenance data or digital signature that is
-  compliant with widely adopted specifications adopted by an established
-  standards-setting body from content uploaded or distributed on the large online
-  platform.” (c): “This section shall become operative on January 1, 2027.”
+- § 22757.3.1(c), as amended by AB 2713: “A large online platform shall not, to the
+  extent technically feasible, knowingly strip any system provenance data or digital
+  signature from content uploaded to, distributed on, or downloaded from the large
+  online platform.” (d): “This section does not require a large online platform to take
+  any action with respect to provenance data, system provenance data, or digital
+  signatures that are not compliant or interoperable with widely adopted specifications
+  issued by an established standards-setting body.” (e): “This section shall become
+  operative on January 1, 2027.” Why (c) of AB 2713 and not (b) of AB 853: the section
+  in the code until 31 December 2026 is AB 853's, whose (b) forbade the same stripping
+  but was not operative before 1 January 2027 either; on that day AB 2713 replaces it.
+  The text AB 853 wrote never applies, so it is not cited. The tool does not judge (d):
+  whether a mark meets “widely adopted specifications” is not read from the file.
 - Art. 10: “任何组织和个人不得恶意删除、篡改、伪造、隐匿本办法规定的生成合成内容标识” (no
   organisation or individual may maliciously delete, tamper with, forge or conceal the
   labels).
@@ -412,7 +446,7 @@ because the tool claims which rule obliges you to keep it in your case.
 
 - **Severity:** error
 - **Literal:** see above.
-- **Source:** <https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content>, <https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=BPC&division=8.&title=&part=&chapter=25.&article=> (accessed 2026-10-02)
+- **Source:** <https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content> (accessed 2026-10-02), <https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB2713> (AB 2713; accessed 2026-10-14, in a browser)
 - **How it is checked:** there was a readable manifest before; after, there is none or
   only a remote reference.
 
@@ -471,8 +505,11 @@ because the tool claims which rule obliges you to keep it in your case.
 
 - **Imperceptible watermarks** (Code of Practice Sub-measure 1.1.2) and fingerprinting
   (1.1.3): proprietary, each vendor ships its own detector.
-- **Deepfakes and visible labels** (Art. 50(4), § 22757.3(a), China's explicit labels):
-  the linter reads metadata, it does not look at the content.
+- **Deepfakes and visible labels** (Art. 50(4), China's explicit labels): the linter
+  reads metadata, it does not look at the content. California has required no visible
+  (manifest) disclosure since SB 1000 (30 September 2026).
+- **California § 22757.3(a)(1)(E) and (F)**, (a)(2) and (a)(3): see the table under
+  “California”.
 - **Text** (Art. 50(2) covers text, and so does TC260-PG-20258A): v0.1 handles image,
   video and audio only.
 - **Whether content is synthetic**: the tool reads what the file declares about itself.

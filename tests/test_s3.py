@@ -58,7 +58,7 @@ def test_los_originales_de_s3_llevan_las_tres_marcas(original: str) -> None:
     assert m.c2pa.estado == "valido" and m.ia_en_c2pa and m.ia_en_xmp and m.ia_en_aigc
     # Firmados con el certificado de prueba de c2patool: firma íntegra, no confiable.
     # Y c2patool, por defecto, no pone «when» en la acción ni sella la firma: el
-    # manifiesto no dice cuándo se creó el contenido, que es lo que pide § 22757.3(b)(1)(C).
+    # manifiesto no dice cuándo se creó el contenido, que es lo que pide § 22757.3(a)(1)(C).
     assert {h.regla for h in audita(m, ("eu", "ca", "cn"))} == {
         "C2PA-003",
         "EU-COP-002",

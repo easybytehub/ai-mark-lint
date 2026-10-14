@@ -260,3 +260,19 @@ def test_label_vacio_no_cuenta_como_marca_ia() -> None:
     m = _m(C2paInfo(estado="ausente"), aigc=[interpreta_aigc("x", '{"Label":""}')])
     assert not m.alguna_marca_ia
     assert {"EU-50-2-001", "CN-45438-003"} <= _reglas(m)
+
+
+def test_california_cites_the_text_in_force_since_sb_1000() -> None:
+    """SB 1000 (30-sep-2026) movió la divulgación latente de § 22757.3(b) a (a) y quitó el
+    umbral de 1.000.000 de usuarios: ni la cita ni el mensaje pueden volver a lo de antes."""
+    hallazgos = {h.regla: h for h in audita(inventaria(FIX / "jpeg/sin-marcas.jpg"), ("ca",))}
+    h = hallazgos["CA-942-001"]
+    assert h.norma == (
+        "Cal. Bus. & Prof. Code § 22757.3(a) (SB 942, as amended by AB 853 and SB 1000)"
+    )
+    assert "§ 22757.1(e)" in h.detalle and "1,000,000" not in h.detalle
+    assert "codes_displaySection" in h.url and "sectionNum=22757.3." in h.url
+    m = inventaria(FIX / "png/aigc-incompleto.png")
+    normas = {h.regla: h.norma for h in audita(m, ("ca",))}
+    assert normas["CA-942-005"].startswith("Cal. Bus. & Prof. Code § 22757.3(a)(1)(D) (SB 942")
+    assert all("22757.3(b)" not in n for n in normas.values())

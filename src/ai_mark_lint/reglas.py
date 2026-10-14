@@ -239,11 +239,13 @@ def california(m: Marcas) -> list[Hallazgo]:
             enlace
             + _sin_libreria(m)
             + "No readable C2PA manifest, no IPTC XMP, no AIGC label. The law allows the "
-            "latent "
-            "disclosure to be something else (a watermark, a link), but it must be “consistent "
-            "with widely accepted industry standards” and convey the four data items of "
-            "§ 22757.3(b)(1).\nIt only binds “covered providers”: GenAI systems with over "
-            "1,000,000 monthly visitors or users. Operative since 2 August 2026.",
+            "latent disclosure to be something else (a watermark, a link), but it must be "
+            "“compliant or interoperable with widely recognized industry standards” and convey "
+            "the items of § 22757.3(a)(1).\nIt only binds “covered providers”: “a person that "
+            "creates, codes, or otherwise produces a generative artificial intelligence system "
+            "that is publicly accessible within the geographic boundaries of the state” "
+            "(§ 22757.1(e)), with no user threshold since SB 1000. Operative since "
+            "2 August 2026.",
         )
     aigc = [e.campos for e in m.aigc if e.campos]
     out: list[Hallazgo] = []
@@ -276,9 +278,9 @@ def california(m: Marcas) -> list[Hallazgo]:
         )
     if out:
         texto = (
-            "\nThe law requires these items “to the extent that it is technically feasible and "
-            "reasonable” and allows them “through a link to a permanent internet website”: "
-            "hence a warning, not an error."
+            "\nThe law requires the disclosure “to the extent it is technically feasible” and "
+            "allows these items “through a link to a permanent internet website”: hence a "
+            "warning, not an error."
         )
         out[-1] = REGLAS[out[-1].regla].hallazgo(out[-1].detalle + texto, fichero=m.fichero)
     return out
