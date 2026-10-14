@@ -94,12 +94,12 @@ def test_every_third_party_action_is_pinned_by_sha_with_its_exact_version() -> N
         assert len(FIJADA.findall(texto)) == len(usos), fichero
 
 
-def test_ci_action_job_skips_fork_pull_requests() -> None:
+def test_ci_action_job_does_not_upload_fixture_findings() -> None:
+    """The fixtures break the rules on purpose: in code scanning they would bury real alerts."""
     ci = yaml.safe_load((RAIZ / ".github/workflows/ci.yml").read_text(encoding="utf-8"))
-    assert ci["jobs"]["action"]["if"] == (
-        "github.event_name == 'push' || "
-        "github.event.pull_request.head.repo.full_name == github.repository"
-    )
+    trabajo = ci["jobs"]["action"]
+    assert "security-events" not in trabajo["permissions"]
+    assert not [p for p in trabajo["steps"] if "upload-sarif" in p.get("uses", "")]
 
 
 def test_release_gates_pypi_on_the_repository_variable() -> None:
