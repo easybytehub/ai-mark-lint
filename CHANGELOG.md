@@ -2,6 +2,26 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: SemVer.
 
+## [0.1.3] — unreleased
+
+First release on PyPI. No change in the rules or their results.
+
+### Fixed
+- README: the S3 figure for C2PA after re-encoding is 0/124, the outputs of Pillow,
+  sharp, `next/image`, ImageMagick and ffmpeg. The 0/136 it gave also counted 12
+  ExifTool strip/restore outputs, which are not re-encodings.
+- README: `pip install ai-mark-lint` is marked as pending publication on PyPI, with the
+  command that works until then; links to SPEC, LICENSE and the fixtures are absolute,
+  so they also work on PyPI.
+- Two code comments no longer cite the withdrawn S6 study.
+
+### Changed
+- SPEC compares the C2PA sections it quotes with C2PA 2.4 (April 2026) and explains
+  why it keeps citing 2.2.
+- The release workflow runs the tests, ruff and mypy before building.
+- CI still runs the GitHub Action on the S3 fixtures, but no longer uploads their SARIF
+  to code scanning: those files break the rules on purpose.
+
 ## [0.1.2] — 2026-10-03
 
 ### Added
