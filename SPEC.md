@@ -1,8 +1,8 @@
-# ai-mark-lint — rule specification (v0.1.0)
+# ai-mark-lint — rule specification
 
 Every rule has a stable ID, the **literal** sentence of the law or standard that
 supports it, the URL where it was read, the access date, its severity and how it is
-checked. All sources were accessed on **2026-10-02** by downloading the HTML or PDF with
+checked. All sources were accessed on **2026-10-02** (the C2PA 2.4 comparison, on 2026-10-14) by downloading the HTML or PDF with
 `curl` and searching for the literal sentence with `grep`; no quotation comes from an
 automatic summary.
 
@@ -170,7 +170,7 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 - **Severity:** undetermined
 - **Literal:** the validation clause of C2PA 2.2 (signature, chain and hashes).
 - **Source:** C2PA 2.2, “Validation” — <https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html> (accessed 2026-10-02)
-- **How it is checked:** the file contains C2PA data and the official library cannot be
+- **How it is checked:** the file contains C2PA data and `c2pa-python` cannot be
   imported on this platform. Cryptographic validation is never reimplemented.
 
 ### C2PA-008 — Only a reference to a remote manifest, not a manifest
@@ -182,9 +182,9 @@ non-compliant, or the law allows a route that cannot be seen from the file) and
 - **How it is checked:** there is no embedded manifest and `c2pa-python` reports a
   remote reference (XMP `dcterms:provenance`). **ai-mark-lint never follows it**
   (`remote_manifest_fetch = false`): a CI linter does not make requests dictated by the
-  file it audits. It does not count as a mark: the S3 study measured that, when the
-  reference survives in a derivative, the hash fails against the original's manifest
-  (3 out of 3).
+  file it audits. It does not count as a mark: the S3 study validated three resized derivatives against
+  the original's sidecar manifest and all three failed with `assertion.dataHash.mismatch`
+  (3 out of 3): a reference that survives leads to a manifest that no longer matches.
 
 ### C2PA-009 — A CAWG identity assertion does not validate [unverified]
 

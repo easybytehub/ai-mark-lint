@@ -6,8 +6,8 @@
 publish still carry the machine-readable AI marks the law asks for — and cites the
 article for every finding.**
 
-It reads the three marks that exist in practice — a **C2PA manifest** (validated with the
-official `c2pa-python` library), **IPTC `DigitalSourceType`** in XMP, and the **`AIGC`
+It reads the three marks that exist in practice — a **C2PA manifest** (validated with
+`c2pa-python`, the Content Authenticity Initiative's open-source C2PA library), **IPTC `DigitalSourceType`** in XMP, and the **`AIGC`
 implicit label** of China's GB 45438-2025 — and checks them against:
 
 - **EU AI Act, art. 50(2)** — applicable since 2 August 2026 (2 December 2026 for systems
@@ -93,8 +93,8 @@ install the wheel attached to a GitHub release, or from source:
 pip install git+https://github.com/easybytehub/ai-mark-lint
 ```
 
-Python 3.11+. One runtime dependency, on purpose: `c2pa-python`, the C2PA's official
-library. Validating a manifest means verifying a COSE signature, an X.509 chain and
+Python 3.11+. One runtime dependency, on purpose: `c2pa-python`, the Python binding of
+c2pa-rs, the Content Authenticity Initiative's open-source C2PA library. Validating a manifest means verifying a COSE signature, an X.509 chain and
 hashes over the file; reimplementing that would be inventing cryptography in a tool whose
 whole value is being believable. Everything else — XMP, EXIF, PNG/RIFF chunks, ID3, MP4
 boxes, HEIF — is parsed with the standard library. If `c2pa-python` cannot load on your

@@ -34,7 +34,8 @@ the repository.
 
 Copied unmodified from `easyxlab/studies/s3-ai-marks-survival/fixtures/`
 (`img/*-all-remote.*`, `av/mp4-all.mp4` and all of `derived/`) on 2026-10-02. Their
-original README is `s3/README-S3.md`. S3 signed them with the c2patool 0.27.22 *test*
+original README is `s3/README-S3.md` (it names the compare mode by its early flags,
+`--antes/--despues`; today they are `--before/--after`). S3 signed them with the c2patool 0.27.22 *test*
 certificate; a signed file does not contain the key. The derivatives were produced by
 real tools (sharp, ImageMagick, Pillow, ffmpeg, exiftool) and by sharp with the call
 chain of the next/image optimizer. The expected result for each pair is in

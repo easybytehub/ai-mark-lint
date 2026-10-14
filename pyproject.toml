@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ai-mark-lint"
-description = "Checks in CI that synthetic images, video and audio carry the machine-readable AI marks required by EU AI Act art. 50(2), California SB 942/AB 853 and China GB 45438-2025, citing the rule for every finding. Read-only."
+description = "Checks in CI that synthetic images, video and audio carry machine-readable AI marks (C2PA, IPTC DigitalSourceType, the GB 45438 AIGC label), judged against EU AI Act art. 50(2), California SB 942/AB 853 and China GB 45438-2025, citing the rule for every finding. Read-only."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
