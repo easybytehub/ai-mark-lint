@@ -6,9 +6,9 @@
 # Set `python-version` to what the rest of your job expects.
 name: ai-mark-lint
 description: >-
-  Checks that generated images, video and audio carry the machine-readable AI marks
-  (C2PA, IPTC DigitalSourceType, GB 45438 AIGC label) required by EU AI Act art. 50(2),
-  California SB 942/AB 853 and China GB 45438-2025. Read-only.
+  Checks that generated images, video and audio carry machine-readable AI marks
+  (C2PA, IPTC DigitalSourceType, the GB 45438 AIGC label), judged against EU AI Act
+  art. 50(2), California SB 942/AB 853 and China GB 45438-2025. Read-only.
 author: EasyByte Hub, S. Coop. Mad.
 
 branding:
