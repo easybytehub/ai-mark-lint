@@ -17,8 +17,8 @@ from typing import Any
 # defecto de c2pa-rs (`sdk/src/crypto/cose/valid_eku_oids.cfg`, v0.91.0). c2pa-rs la trae, pero
 # un contexto creado desde `Settings` sin `trust_config` se comporta como si estuviera vacía y
 # rechaza con `signingCredential.invalid` los certificados C2PA normales (los de OpenAI
-# emitidos por Trufo, los de Microsoft…). Lo midió el estudio S6 de EasyxLab en Wikimedia
-# Commons: 187 manifiestos válidos dados por inválidos en ai-mark-lint 0.1.0.
+# emitidos por Trufo, los de Microsoft…). Así le pasaba a ai-mark-lint 0.1.0: un manifiesto
+# válido firmado con uno de esos certificados salía como C2PA-002.
 EKU_POR_DEFECTO = """\
 // id-kp-emailProtection
 1.3.6.1.5.5.7.3.4

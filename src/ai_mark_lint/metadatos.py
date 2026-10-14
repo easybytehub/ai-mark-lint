@@ -136,9 +136,9 @@ def interpreta_aigc(ubicacion: str, crudo: str) -> EtiquetaAigc:
         obj = json.loads(crudo)
     except json.JSONDecodeError as exc:
         return EtiquetaAigc(ubicacion, crudo, None, f"not JSON: {exc.msg}")
-    # Hay generadores que guardan el objeto ya serializado como cadena JSON (lo midió el
-    # estudio S6 de EasyxLab en Commons). La marca existe y se cuenta, pero quien lea una
-    # sola vez, como describen las guías, no la encuentra: CN-45438-006.
+    # El objeto puede llegar serializado dos veces: el valor JSON es una cadena cuyo
+    # contenido es el objeto. La marca existe y se cuenta, pero quien lea una sola vez,
+    # como describen las guías, no la encuentra: CN-45438-006.
     doble = False
     if isinstance(obj, str):
         try:
