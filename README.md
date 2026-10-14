@@ -52,7 +52,9 @@ matches.)
   `digitalSourceType` or breaks the signature shows up in the pull request.
 - **Anyone who publishes synthetic media through a pipeline** (CMS, image CDN,
   transcoder): run the before/after mode on each step. The EasyxLab S3 study measured
-  that **no "keep metadata" option preserved C2PA after re-encoding (0/136)**, and that
+  that **no re-save, resize or format conversion it tested kept an embedded C2PA
+  manifest, "keep metadata" options included (0/124 outputs of Pillow, sharp,
+  `next/image`, ImageMagick and ffmpeg)**, and that
   editing one field with exiftool after signing **leaves the manifest in the file with a
   broken signature (6/6)** — a check that only asks "is there a manifest?" passes it.
 
@@ -83,8 +85,11 @@ reference is reported as "reference only" (C2PA-008), never as a valid mark.
 
 ## Install
 
+`pip install ai-mark-lint` will work once the package is published on PyPI. Until then,
+install the wheel attached to a GitHub release, or from source:
+
 ```bash
-pip install ai-mark-lint
+pip install git+https://github.com/easybytehub/ai-mark-lint
 ```
 
 Python 3.11+. One runtime dependency, on purpose: `c2pa-python`, the C2PA's official
@@ -163,7 +168,7 @@ Python for the steps that follow; set `python-version` accordingly.
 ## What it checks
 
 Full list, with the literal sentence of each rule, its URL, the date it was read and how
-it is checked: **[SPEC.md](SPEC.md)**. In short:
+it is checked: **[SPEC.md](https://github.com/easybytehub/ai-mark-lint/blob/main/SPEC.md)**. In short:
 
 | Family | Rules |
 |---|---|
@@ -199,11 +204,11 @@ python -m venv .venv && .venv/bin/pip install -e ".[dev]"
 .venv/bin/python scripts/generar-fixtures.py     # regenerate the ffmpeg-made media
 ```
 
-Fixtures are documented in [tests/fixtures/README.md](tests/fixtures/README.md). **No
+Fixtures are documented in [tests/fixtures/README.md](https://github.com/easybytehub/ai-mark-lint/blob/main/tests/fixtures/README.md). **No
 private key is committed:** each test session creates a throwaway test CA in a temporary
 directory, signs the fixtures there and deletes it, and a test fails if a key ever lands
-in the tree. The before/after pairs in `tests/fixtures/s3/` come unmodified from the EasyByte
-Lab S3 study and were produced by real tools (sharp, ImageMagick, Pillow, ffmpeg,
+in the tree. The before/after pairs in `tests/fixtures/s3/` come unmodified from the EasyxLab
+S3 study and were produced by real tools (sharp, ImageMagick, Pillow, ffmpeg,
 exiftool, the next/image optimizer).
 
 A rule is a function `Marcas -> list[Hallazgo]`; its ID, severity and citation live once,
@@ -213,7 +218,7 @@ not. When a rule and the law disagree, the law is right and the rule is a bug.
 
 ## License
 
-[Apache-2.0](LICENSE).
+[Apache-2.0](https://github.com/easybytehub/ai-mark-lint/blob/main/LICENSE).
 
 ## Maintained by
 
@@ -221,4 +226,4 @@ EasyxLab, the research lab of EasyByte Hub S. Coop. Mad., a software cooperative
 
 ---
 
-EasyxLab · a research lab by [EasyByte](https://easybyte.es)
+[EasyxLab](https://easybyte.es/lab/) · a research lab by [EasyByte](https://easybyte.es)
