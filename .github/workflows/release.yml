@@ -44,6 +44,15 @@ jobs:
             exit 1
           fi
 
+      # **Nothing is published that the tests have not passed on this exact commit.** CI
+      # runs on pushes to main, but a tag can point at any commit.
+      - name: Test before building
+        run: |
+          python -m pip install --disable-pip-version-check -e ".[dev]"
+          python -m pytest
+          python -m ruff check .
+          python -m mypy
+
       - name: Build
         run: |
           python -m pip install --disable-pip-version-check build==1.2.2.post1
