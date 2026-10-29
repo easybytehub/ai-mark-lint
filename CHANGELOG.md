@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: SemVer.
 
-## [0.1.3] — unreleased
+## [0.1.3] — 2026-10-29
 
 First release on PyPI. California's law changed on 30 September 2026, two days before
 0.1.0: the California rules now cite the text in force. No rule fires on files where it
@@ -40,9 +40,8 @@ did not fire before, or stops firing where it did.
   sharp (also with the call chain of the `next/image` optimizer), ImageMagick and
   ffmpeg. The 0/136 it gave also counted 12 ExifTool strip/restore outputs, which are
   not re-encodings.
-- README: `pip install ai-mark-lint` is marked as pending publication on PyPI, with the
-  command that works until then; links to SPEC, LICENSE and the fixtures are absolute,
-  so they also work on PyPI.
+- README: installs with `pip install ai-mark-lint`; links to SPEC, LICENSE and the
+  fixtures are absolute, so they also work on PyPI.
 - Two code comments and one SPEC note no longer cite the withdrawn S6 study.
 - README: editing a field with exiftool after signing does not break the signature, as
   it said: the signature still verifies, and the manifest is invalid because the content

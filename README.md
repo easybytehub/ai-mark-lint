@@ -91,12 +91,12 @@ reference is reported as "reference only" (C2PA-008), never as a valid mark.
 
 ## Install
 
-`pip install ai-mark-lint` will work once the package is published on PyPI. Until then,
-install the wheel attached to a GitHub release, or from source:
-
 ```bash
-pip install git+https://github.com/easybytehub/ai-mark-lint
+pip install ai-mark-lint
 ```
+
+The wheel is also attached to each GitHub release, or install from source with
+`pip install git+https://github.com/easybytehub/ai-mark-lint`.
 
 Python 3.11+. One runtime dependency, on purpose: `c2pa-python`, the Python binding of
 c2pa-rs, the Content Authenticity Initiative's open-source C2PA library. Validating a manifest means verifying a COSE signature, an X.509 chain and
